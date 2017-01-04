@@ -1,0 +1,24 @@
+<%page args="appTitle=u'客户端下载', appname=u'南沙通下载', appIos='http://wnl.bidongwifi.com:9899/app.html', appAndriod='http://wnl.bidongwifi.com:9899/app.html', appCtx=[u'安装即可上网，优先接入，速度更快', u'政务早知道，办事一键通']" />
+
+<div class="boxWrapper">
+    <h3>${appTitle}</h3>
+    <div class="dwnApp">
+        <a href="javascript:;" class="appDownload">${appname}</a>
+        % if len(appCtx) > 0 :
+        <ul>
+            % for ctx in appCtx:
+            <li>${ctx}</li>
+            % endfor
+        </ul>
+        % endif
+    </div>
+</div>
+
+<script>
+    var u = navigator.userAgent;
+    if(!!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)){
+        $('.appDownload').attr('href', '${appIos}');
+    }else{
+        $('.appDownload').attr('href', '${appAndriod}');
+    }
+</script>

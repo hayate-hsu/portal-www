@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>${self.attr.title}</title>
+    <link rel="stylesheet" type="text/css" href="/css/portal.css">
+    <%block name="jscode">
+    <style>
+        .ns_zz{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:2;display:none}
+        .ns_zz>div{position:absolute;top:15%;left:5%;width:90%;background:#fff;border-radius:5px;box-sizing:border-box;padding:20px 20px 30px}
+        .ns_zz h3{text-align:center;font-size:16px}
+        .ns_zz .btngroups{text-align:center}
+        .ns_zz .btngroups button{color:#fff;font-size:16px;padding:10px 0;border-radius:8px;width:40%;margin:0 5%}
+        #dmSub,#cgSub{background:#6fccf7}
+        #dmQuit,#cgQuit{background:#9e9e9e}
+        .ns_dmc .dmlist{margin:20px 0;height:170px;overflow-y:auto}
+        .ns_dmc label{width:90%;display:table;margin:10px auto}
+        .ns_dmc input{display:table-cell;vertical-align:middle;width:20px;height:20px}
+        .ns_dmc span{display:table-cell;font-size:16px;vertical-align:middle;padding:0 10px}
+        .ns_cgpwd .cgpwd{margin:20px 0}
+        .ns_cgpwd .cgpwd li{font-size:16px;margin:10px 0;display:-webkit-box;display:box}
+        .ns_cgpwd .cgpwd li label{width:100px;line-height:40px;display:inline-block}
+        .ns_cgpwd .cgpwd li>div{-webkit-box-flex:1;box-flex:1;border:thin solid #cecece;border-radius:7px;overflow:hidden}
+        .ns_cgpwd .cgpwd li input{height:40px;width:100%;text-indent:15px;border:none}
+
+        % if not ismobile:
+        .ns_zz>div{position:relative;top:0;left:0;width:405px;height:346px;margin:10% auto;padding:30px 40px}
+        .ns_zz h3{font-size:18px}
+        .ns_zz .btngroups{margin-top:20px}
+        .ns_zz .btngroups button{width:120px;height:40px;background:#6bb2ff;color:#fff;border-radius:5px;margin:0 10px;border:none;font-family:"microsoft yahei", "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;font-size:16px}
+        .ns_dmc .dmlist{height:175px}
+        .ns_dmc label{width:100%;margin-bottom:10px}
+        .ns_dmc input{width:18px;height:18px}
+        .ns_cgpwd .cgpwd{margin:30px 0}
+        .ns_cgpwd .cgpwd li{display:block;font-size:16px;margin:10px 0}
+        .ns_cgpwd .cgpwd li label{width:32%;vertical-align:middle}
+        .ns_cgpwd .cgpwd li>div{width:67%;border:1px solid #cecece;display:inline-block;vertical-align:middle;box-sizing:border-box}
+
+        .FormAccount{width:600px\0;margin:0 auto\0;min-height:100%\0;background:#fff\0;border-left:1px solid #999\0;border-right:1px solid #999\0}
+        .FormAccount{width:600px;margin:0 auto;min-height:100%;background:#fff;box-shadow:0 0 3px 5px rgba(0,0,0,0.1)}
+        %endif
+    </style>
+    <script src="/js/lib/jquery.min.js"></script>
+    <script src="/js/lib/md5.js"></script>
+    <script src="/js/ns.js?v=1.0.5"></script>
+    </%block>
+</head>
+
+<body>
+    <div class="FormAccount">
+        <div class="header">
+            <img src="/images/${self.attr.bannerBg}" class="bannerBg" />
+            % if self.attr.autoAccount:
+            <button type="button" id="autoAccount">一键认证</button>
+            % endif
+            <div>${self.attr.bannerText}</div>
+        </div>
+
+        <div class="contentWrapper">
+            % if (policy >> 9 & 1) > 0:
+            <div class="boxWrapper">
+                <h3>第三方认证</h3>
+                <button type="button" id="weixinAuthor"><i></i>微信上网</button>
+            </div>
+            % endif
+
+            <%block name="appDownload" />
+
+            % if ((policy>>10 & 1) & (policy>>8 & 1)) > 0:
+            <div class="boxWrapper ${self.attr.color}">
+                <h3>${self.attr.accountTitle}</h3>
+                <div class="wifiWrapper">
+                    <div class="inputWrapper"><input type="text" placeholder="账号/手机号：" name="user" /><button type="button" id="yzm">获取验证码</button></div>
+                    <div class="inputWrapper"><input type="password" placeholder="密码/验证码：" name="password" /></div>
+                    % if self.attr.duty:
+                    <label id="autoLogin" data-name="nsName_${self.attr.nsName}"><input type="checkbox" />记住账号</label>
+                    % endif
+                    <button type="button" id="login" data-url="${self.attr.locationUrl}">登录</button>
+                    <span class="ns_msg"></span>
+                    % if self.attr.duty:
+                    <label id="autoDuty"><input type="checkbox" checked />我已阅读并同意<a href="javascript:;">无线上网业务</a>免责声明</label>
+                    % endif
+                </div>
+            </div>
+            % elif (policy >> 10 & 1) > 0:
+            <div class="boxWrapper ${self.attr.color}">
+                <h3>${self.attr.accountTitle}</h3>
+                <div class="wifiWrapper">
+                    <div class="inputWrapper"><input type="text" placeholder="手机号：" name="user" /><button type="button" id="yzm" style="display:block">获取验证码</button></div>
+                    <div class="inputWrapper"><input type="text" placeholder="验证码：" name="password" /></div>
+                    % if self.attr.duty:
+                    <label id="autoLogin" data-name="nsName_${self.attr.nsName}"><input type="checkbox" />记住账号</label>
+                    % endif
+                    <button type="button" id="login" data-url="${self.attr.locationUrl}">登录</button>
+                    <span class="ns_msg"></span>
+                    % if self.attr.duty:
+                    <label id="autoDuty"><input type="checkbox" checked />我已阅读并同意<a href="javascript:;">无线上网业务</a>免责声明</label>
+                    % endif
+                </div>
+            </div>
+            % elif (policy >> 8 & 1) > 0:
+            <div class="boxWrapper ${self.attr.color}">
+                <h3>${self.attr.accountTitle}</h3>
+                <div class="wifiWrapper">
+                    <div class="inputWrapper"><input type="text" placeholder="账号：" name="user" /></div>
+                    <div class="inputWrapper"><input type="password" placeholder="密码：" name="password" /></div>
+                    % if self.attr.duty:
+                    <label id="autoLogin" data-name="nsName_${self.attr.nsName}"><input type="checkbox" />记住账号</label>
+                    % endif
+                    <button type="button" id="login" data-url="${self.attr.locationUrl}">登录</button>
+                    <span class="ns_msg"></span>
+                    % if self.attr.duty:
+                    <label id="autoDuty"><input type="checkbox" checked />我已阅读并同意<a href="javascript:;">无线上网业务</a>免责声明</label>
+                    % endif
+                </div>
+            </div>
+            % endif
+
+            % if self.attr.duty:
+            <div class="ns_ctx">
+                <h3>无线上网业务</h3>
+                <p>1.请保护好您的个人信息与资料，请勿访问非法网站，勿发布违法信息,如有违反造成的损失和法律责任，由您自行承担。</p>
+                <p>2.输入手机号，点击“获取密码”系统将下发密码短信至您的手机，输入密码后，点击“登录”即可上网。使用固定账号请咨询上网场所负责人获取账号密码。</p>
+            </div>
+            % endif
+
+            % if self.attr.qrcode:
+            <div class="boxWrapper">
+                <h3>广东女院APP下载</h3>
+                <a href="https://itunes.apple.com/us/app/id1127133673" class="ns_qrcode">
+                    <img src="/images/app_ios_school.png" />
+                </a>
+            </div>
+            <script>
+            var u = navigator.userAgent;
+            if(!!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)){
+                $('.ns_qrcode').attr('href', 'https://itunes.apple.com/us/app/id1127133673');
+                $('.ns_qrcode img').attr('src', '/images/app_ios_school.png');
+            }else{
+                $('.ns_qrcode').attr('href', 'http://58.248.228.170:9898/downloads/android/nzxy.apk');
+                $('.ns_qrcode img').attr('src', '/images/app_andriod_school.png');
+            }
+            </script>
+            % endif
+        </div>
+
+        <%block name="footer" />
+    </div>
+
+    <%include file="hidwx.html" />
+
+<script type="text/javascript">
+    % if (policy >> 9 & 1) > 0:
+    document.addEventListener('visibilitychange', putNoResponse, false);
+    % endif
+    $(function(){
+        % if (policy >> 9 & 1) > 0:
+        $('#weixinAuthor').click(function(){
+            Wechat_GotoRedirect('${appid}', '${extend}', '${timestamp}', '${sign}', '${shopid}', '${authUrl}', '${user_mac}', '${ssid}', '${ap_mac}');
+        });
+        % endif
+
+        $('.FormAccount').auPortal({
+            user: '${user}',
+            password: '${password}',
+            openid: '${openid}',
+            ac_ip: '${ac_ip}',
+            vlanId: '${vlan}',
+            ssid: '${ssid}',
+            user_ip: '${user_ip}',
+            user_mac: '${user_mac}',
+            ap_mac: '${ap_mac}',
+            firsturl: '${firsturl}',
+            urlparam: '${urlparam}',
+            appid: '${appid}',
+            shopid: '${shopid}',
+            pn: '${pn}',
+            policy: ${policy},
+
+            % if self.attr.autoAccount:
+            auto: true,
+            % endif
+
+            ismobile: ('${ismobile}'=='True' ? true : false)
+        });
+    });
+</script>
+</body>
+</html>
+<%!
+    title = u'壁咚无线验证';
+    bannerBg = 'bg.jpg';
+    bannerText = '';
+    color = 'G_orange';
+    duty = False;               ##同意条款
+    nsName = 'auto';            ##自动保存账号
+    accountTitle = u'账户认证';
+    qrcode = False;             ##二维码
+    autoAccount = False;        ##自动认证
+    locationUrl = '';           ##指定跳转URL
+%>

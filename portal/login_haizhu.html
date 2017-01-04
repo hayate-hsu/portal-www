@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>海珠机关无线网</title>
+    <link rel="stylesheet" type="text/css" href="/css/portal.css">
+    <style>
+        .boxWrapper{border-top:1px solid #d9d9d9;padding:20px}
+        .boxWrapper button{font-size:18px}
+        .inputWrapper{box-sizing:border-box;display:-webkit-box;overflow:hidden}
+        .inputWrapper>div{-webkit-box-flex:1}
+        .inputWrapper>span{color:#777;display:inline-block;line-height:45px;text-indent:20px;font-size:20px}
+        .inputWrapper>div input{height:45px;padding:0;text-indent:5px;font-size:20px}
+        #infoCheck,#login{background:#1e9ef7;margin-top:18px;border:none}
+        #infoCheck:active,#login:active{background:#1b8bda;border:none}
+        #infoCheck:disabled,#login:disabled{background:#a8cbe7}
+        #deptWrapper{width:100%;position:relative}
+        #deptWrapper a{width:32%;display:inline-block;font-size:20px;color:#444;box-sizing:border-box;border:1px solid #86bce2;border-radius:5px;text-align:center;padding:7px 0;margin-right:1%;background:#fff;margin-top:0;vertical-align:top}
+        #deptWrapper a.on,#deptWrapper a:active{background:#e0f6ff;color:#0971c9}
+        #deptWrapper>div{background:rgba(0,0,0,.5);position:absolute;top:0;left:0;right:0;bottom:0;color:#fff;text-align:center;box-sizing:border-box;padding-top:8px;font-size:18px;display:none}
+        .hz_msg{color:#e7491f;font-size:18px;margin:9px 0;display:block;text-align:justify}
+        .deptBox{display:none;padding-bottom:50px}
+        p.hz_msg{margin:0;padding:5px 0;height:25px}
+        p.hz_msg:before{content:"";display:block}
+        .ns_msg{font-size:18px}
+
+        % if not ismobile:
+        .inputWrapper{box-sizing:border-box;display:block;overflow:hidden}
+        .inputWrapper>div{width:420px;display:inline-block}
+        .inputWrapper>span{width:auto}
+        % endif
+    </style>
+    <%namespace file="base.html" name="jscode" />
+    ${jscode.jscode()}
+</head>
+
+<body>
+    <div class="FormAccount">
+        <div class="header">
+            <img src="/images/bg_haizhu.jpg" class="bannerBg" />
+        </div>
+
+        <div class="contentWrapper">
+            <div class="boxWrapper">
+                <!--<h3>账户认证</h3>-->
+                <div class="wifiWrapper">
+                    <div class="inputWrapper">
+                        <span>姓名：</span><div><input type="text" name="name" /></div>
+                    </div>
+                    <div class="inputWrapper">
+                        <span>手机号：</span><div><input type="text" name="user" /></div>
+                    </div>
+                    <button type="button" id="infoCheck" disabled>下一步</button>
+                    <span class="hz_msg"></span>
+                </div>
+            </div>
+            <div class="boxWrapper deptBox">
+                <h3>选择部门</h3>
+                <div id="deptWrapper">
+                    <p data-value="">
+                        <!--<a href="javascript:;">人事部</a><a href="javascript:;">开发部</a><a href="javascript:;">技术部</a>-->
+                    </p>
+                    <div></div>
+                </div>
+                <p class="hz_msg"></p>
+                <div class="wifiWrapper">
+                    <div class="inputWrapper">
+                        <span>验证码：</span><div><input type="text" name="password" /></div>
+                    </div>
+                </div>
+                <button type="button" id="login" data-url="${self.attr.locationUrl}" disabled>登录</button>
+                <div class="ns_msg"></div>
+            </div>
+        </div>
+    </div>
+
+    <%include file="hidwx.html" />
+
+<script type="text/javascript">
+    $(function(){
+        $('.FormAccount').auPortal({
+            user: '${user}',
+            password: '${password}',
+            openid: '${openid}',
+            ac_ip: '${ac_ip}',
+            vlanId: '${vlan}',
+            ssid: '${ssid}',
+            user_ip: '${user_ip}',
+            user_mac: '${user_mac}',
+            ap_mac: '${ap_mac}',
+            firsturl: '${firsturl}',
+            urlparam: '${urlparam}',
+            appid: '${appid}',
+            shopid: '${shopid}',
+            pn: '${pn}',
+
+            ismobile: ('${ismobile}'=='True' ? true : false),
+
+            isname: false
+        });
+        $(document).on('click', '#infoCheck', function(){
+            var $this = $(this);
+            var name = $('input[name=name]').val(),
+                mobile = $('input[name=user]').val();
+            if(canyzm){
+                $.ajax({
+                    method: "get",
+                    url: '/pn/${pn}',
+                    dataType: "json",
+                    data: {
+                        name: name,
+                        mobile: mobile
+                    },
+                    success: function(data){
+                        $('.hz_msg').text('');
+                        var deptArr = showDept(data.department);
+                        for(var i=0, h=''; i<deptArr.length; i++){
+                            var dept = deptArr[i];
+                            h += '<a href="javascript:;">'+dept+'</a>';
+                        }
+                        $('#deptWrapper p').data('value', data.department).html(h);
+                        $('.deptBox').slideDown();
+                    },
+                    error: function(error){
+                        try{
+                            $('.deptBox').slideUp('normal', function(){
+                                $this.next('.hz_msg').text('温馨提示：如因未注册海珠区OA用户或个人信息中未登记手机号码的，将无法获取短信验证码完成认证上网。具体可联系区政务办电子政务技术信息中心，联系人：郑加才、付云飞、电话：89088737、89088722。');
+                            });
+                        }catch (e){
+                            $this.next('.hz_msg').text('请检查网络状态');
+                        }
+
+                    }
+                });
+            }
+        });
+        $(document).on('click', '#deptWrapper a', function(){
+            $(this).addClass('on').siblings().removeClass('on');
+            var dept = $(this).text(), deptId = $(this).parent().data('value');
+            if((deptId == dept) && canyzm){
+                // 发送验证码
+                $('#deptWrapper').next('.hz_msg').text('验证码已经发送到您的手机，请注意查收!');
+                        $('#deptWrapper>div').html('<span>60</span>秒后重新获取验证码').show();
+                        delayDept();
+                $.ajax({
+                    method: "post",
+                    url: '/wnl/mobile',
+                    dataType: "json",
+                    data: {
+                        mobile: $('input[name=user]').val(),
+                        mask: 256,
+                        pn: $('#pn').val()
+                    },
+                    success: function(data){
+                        verify = data.verify;
+                        $('#deptWrapper').next('.hz_msg').text('验证码已经发送到您的手机，请注意查收!');
+                        $('#deptWrapper>div').html('<span>60</span>秒后重新获取验证码').show();
+                        delayDept();
+                    },
+                    error: function(msg){
+                        console.log(msg);
+                        alert('请检查网络状态');
+                    }
+                });
+            }else{
+                $('#deptWrapper').next('.hz_msg').text('部门选择有误，请重新选择');
+            }
+        });
+    });
+    function delayDept(){
+        var delay = $('#deptWrapper>div span').text();
+        var t = setTimeout('delayDept()', 1000);
+        if(delay>1){
+            delay--;
+            $('#deptWrapper>div span').text(delay);
+            canyzm = false;
+        }else{
+            clearTimeout(t);
+            $('#deptWrapper>div').hide();
+            canyzm = true;
+        }
+    }
+    function showDept(dept) {
+        // 预设部门
+        var deptlist = ['区发改局', '人大办公室', '海珠区法院', '区信访局', '提案委', '沙园街', '海珠区国税局', '区妇联', '区两建办', '新港街'];
+        var deptIdx = deptlist.indexOf(dept);
+        if (deptIdx > 0) {
+            deptlist.splice(deptIdx, 1);
+        }
+        var sL = deptlist.length;
+        // 随机数组
+        var randoms = [], deptThd = [];
+        deptThd.push(dept);
+
+        //随机数组下标
+        for (var i = 0; i < 2; i++) {
+            var rand = Math.floor(Math.random() * sL);
+            if (randoms.length > 0) {
+                detection(randoms, rand, sL);
+            } else {
+                randoms.push(rand);
+            }
+        }
+        //检测num是否存在于arr，存在重新添加，不存在直接添加
+        function detection(arr, num, sL) {
+            var repeatFlag = false;
+            for (var j = 0; j < arr.length; j++) {
+                if (arr[j] == num) {
+                    repeatFlag = true;
+                }
+            }
+            if (repeatFlag) {
+                //递归
+                arguments.callee(arr, Math.floor(Math.random() * sL));
+            } else {
+                arr.push(num);
+            }
+        }
+        for (var j = 0; j < randoms.length; j++) {
+            var r = randoms[j];
+            deptThd.push(deptlist[r]);
+        }
+        deptThd.sort(function(){ return 0.5 - Math.random() });
+        console.log(deptThd);
+        return deptThd;
+    }
+</script>
+</body>
+</html>
+<%!
+    locationUrl = '';
+%>

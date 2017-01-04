@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>${self.attr.title}</title>
+    <link rel="stylesheet" href="/css/owl.css" />
+    <style type="text/css">
+        *{margin:0;padding:0}
+        body,html{width:100%;height:100%}
+        body{font-family:"microsoft yahei",Arial,Helvetica,sans-serif;font-size:16px}
+        button,input{-webkit-tap-highlight-color:transparent;outline:0;font-family:"microsoft yahei","Helvetica Neue Light",HelveticaNeue-Light,"Helvetica Neue",Calibri,Helvetica,Arial}
+        button{border:none}
+        li{list-style:none}
+        a{text-decoration:none}
+        #banner{background:#d8d8d8;height:200px;position:relative}
+        #banner .shadow{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom,rgba(9,27,42,0) 0,rgba(9,27,42,0) 80%,rgba(9,27,42,.2) 100%)}
+        #banner a{display:block;width:100%}
+        #banner p{position:absolute;bottom:8px;left:16px;color:#fff;font-size:16px;z-index:2}
+        #banner img{display:block;width:100%;height:200px}
+        .owl-controls{position:relative;top:-16px}
+        .owl-controls .owl-dots{position:absolute;right:16px;line-height:0;text-align:center}
+        .owl-theme .owl-dots .owl-dot{display:inline-block}
+        .owl-theme .owl-dots .owl-dot span{display:block;background:rgba(255,255,255,.4);width:7px;height:7px;margin-left:5px}
+        .owl-theme .owl-dots .owl-dot.active span,.owl-theme .owl-dots .owl-dot:hover span{background:rgba(255,255,255,.85);width:14px}
+        .header{background:#3b9ce7;height:35px;color:#fff;font-size:15px;text-align:center;line-height:35px}
+        .header i{background:url(/images/Wi-Fi.png) no-repeat;background-size:19px;width:19px;height:14px;display:inline-block;vertical-align:middle;margin-right:5px}
+        .boxWrapper h3{color:#444;font-size:14px;line-height:40px}
+        .dwnApp ul{padding-top:3px}
+        .dwnApp li{background:url(/images/dot_ico.png) 0 7px no-repeat;background-size:4px;font-size:14px;padding-left:10px;margin-top:7px}
+        .boxWrapper{padding:0 20px 10px;box-sizing:border-box;border-top:thin solid #efefef}
+        div.boxWrapper:first-child{border:none}
+        .boxWrapper p{color:#444;font-size:14px;line-height:40px}
+        .boxWrapper .inputWrapper{position:relative;border:thin solid #cecece;background:#f7f7f7;border-radius:7px}
+        .boxWrapper .inputWrapper input{width:100%;height:45px;background:0 0;border:none;font-size:14px;text-indent:18px;line-height:45px\0}
+        #yzm, #changepwd{position:absolute;top:0;right:0;width:90px;background:0 0;text-decoration:underline;color:#3b9ce7;height:45px;font-size:13px}
+        #yzm:disabled{color:#9e9e9e;text-decoration:none}
+        #login,#weixinAuthor,.appDownload{width:100%;height:42px;color:#fff;border-radius:7px;font-size:16px;margin-top:12px}
+        .appDownload{display:block;background:#51adf1;text-align:center;line-height:42px;margin:0}
+        .appDownload:active{background:#43a0de}
+        #login{background:#3b9ce7}
+        #login:active{background:#2282c5}
+        #login:disabled{background:#a8cbe7}
+        .term{color:#444;font-size:14px;margin-top:10px;display:block;text-align:center;-webkit-tap-highlight-color:transparent}
+        .term a{color:#139ae7;font-style:normal;text-decoration:none}
+        .chkcls{display:inline-block;padding:5px 0}
+        .chkcls i{background:url(/images/radio.png) no-repeat;background-size:15px;width:15px;height:15px;display:inline-block;vertical-align:middle;margin-right:5px}
+        i.chk{background-position:0 0}
+        i.unchk{background-position:0 -15px}
+        #weixinAuthor{background:#2fdf33}
+        #weixinAuthor:active{background:#2ac82e}
+        #weixinAuthor:disabled{background:#7edd80}
+        #weixinAuthor i{background:url(/images/weixin_ico.png) no-repeat;background-size:23px;width:23px;height:19px;display:inline-block;vertical-align:middle;margin-right:5px}
+        .termWrapper{background:rgba(0,0,0,.4);position:fixed;top:0;left:0;width:100%;bottom:0;z-index:2;display:none}
+        .termbox{box-sizing:border-box;margin:10px 20px 0;background:#fff;border-radius:4px;overflow:hidden;height:96%;position:relative}
+        .termHeader{height:50px;background:#f4f4f4;text-align:center;font-size:15px;color:#333;line-height:50px;font-weight:700;box-shadow:0 1px 3px rgba(167,167,167,.4)}
+        .termContent{overflow-y:auto;position:absolute;top:50px;left:0;width:100%;bottom:50px}
+        .termContent div{padding:10px 20px}
+        .termContent h4{font-size:13px;color:#333;line-height:21px;font-weight:700}
+        .termContent p{font-size:13px;color:#666;line-height:21px;text-align:justify;margin-bottom:15px}
+        .termFooter{background:#f4f4f4;height:50px;box-shadow:0 -1px 3px rgba(167,167,167,.4);position:absolute;bottom:0;left:0;width:100%;border-bottom-left-radius:4px;border-bottom-right-radius:4px}
+        .termFooter label{color:#444;font-size:14px;line-height:40px;margin-left:26px;-webkit-tap-highlight-color:transparent}
+        #termCheck{height:33px;width:80px;background:#f4f4f4;border:thin solid #cecece;border-radius:2px;position:absolute;right:26px;top:8px}
+        #termCheck:active{background:#3b9ce7;color:#fff}
+        .ns_qrcode{display:block;width:200px;height:200px;margin:0 auto}
+        .ns_qrcode img{display:block;width:200px;height:200px}
+        .ns_msg{text-align:center}
+        .footer{font-size:14px;text-align:center;padding:30px 0}
+        .FormAccount{padding-bottom:30px}
+        .sAct{cursor:pointer}
+
+        % if (((policy>>10 & 1) | (policy>>8 & 1)) <= 0):
+        body{
+            background: url("/images/wxbg.jpg") repeat-y;
+            background-size: 100%;
+            height: 100%;
+            width: 100%;
+        }
+        #banner{height:265px}
+        #banner img{height:265px}
+        #weixinAuthor{height:56px;border-radius:28px;font-size:20px;margin-top:60px}
+        #weixinAuthor i{background-size:27px;width:27px;height:22px}
+        % endif
+
+        % if not ismobile:
+        #banner{height:265px}
+        #banner img{height:265px}
+        .termbox{width:600px;margin:10px auto}
+        % endif
+    </style>
+    <%namespace file="base.html" name="jscode" />
+    ${jscode.jscode()}
+    <script type="text/javascript" src="/js/lib/owl.min.js"></script>
+</head>
+
+<body>
+    <div class="FormAccount">
+        <div class="header"><i></i>欢迎连接${self.attr.name}wifi</div>
+        <div id="banner" class="owl-carousel">
+            % if len(owlStatic) > 0:
+            % for ad in owlStatic:
+            <div><img src="/images/${ad}" /></div>
+            % endfor
+            % else:
+            <!--<a href="/news.html">-->
+                <!--<img src="" />-->
+                <!--<p></p>-->
+                <!--<span class="shadow"></span>-->
+            <!--</a>-->
+            % endif
+        </div>
+
+        <div class="contentWrapper">
+
+            <%block name="appDownload" />
+
+            % if ((policy>>10 & 1) & (policy>>8 & 1)) > 0:
+            <div class="boxWrapper wifiWrapper">
+                <p style="line-height:1;margin-top:10px">第1步：填写手机号，点击按钮获取验证码</p>
+                <p style="color:#999;font-size:12px;text-indent:50px;line-height:30px">提示：非本地号码，请用微信验证上网</p>
+                <div class="inputWrapper">
+                    <input type="text" placeholder="输入账号/手机号" name="user" />
+                    <button type="button" id="yzm" class="sYzm">获取验证码</button>
+                </div>
+                <p>第2步：输入验证码，点击按钮即可免费上网</p>
+                <div class="inputWrapper">
+                    <input type="text" placeholder="输入密码/验证码" name="password" />
+                    <button type="button" id="changepwd">修改密码</button>
+                </div>
+                <button type="button" id="login" data-url="${self.attr.locationUrl}" disabled>登录</button>
+                <div class="ns_msg"></div>
+                % if self.attr.term:
+                <label class="term"><span class="chkcls"><i class="chk"></i>我已阅读并同意</span><a href="javascript:;">（南沙无线城市上网服务协议）</a></label>
+                % endif
+            </div>
+            % elif (policy >> 10 & 1) > 0:
+            <div class="boxWrapper wifiWrapper">
+                <p style="line-height:1;margin-top:10px">第1步：填写手机号，点击按钮获取验证码</p>
+                <p style="color:#999;font-size:12px;text-indent:50px;line-height:30px">提示：非本地号码，请用微信验证上网</p>
+                <div class="inputWrapper">
+                    <input type="text" placeholder="手机号" name="user" />
+                    <button type="button" id="yzm">获取验证码</button>
+                </div>
+                <p>第2步：输入验证码，点击按钮即可免费上网</p>
+                <div class="inputWrapper">
+                    <input type="text" placeholder="验证码" name="password" />
+                </div>
+                <button type="button" id="login" data-url="${self.attr.locationUrl}" disabled>登录</button>
+                <div class="ns_msg"></div>
+                % if self.attr.term:
+                <label class="term"><span class="chkcls"><i class="chk"></i>我已阅读并同意</span><a href="javascript:;">（南沙无线城市上网服务协议）</a></label>
+                % endif
+            </div>
+            % elif (policy >> 8 & 1) > 0:
+            <div class="boxWrapper wifiWrapper">
+                <p>第1步：填写账号</p>
+                <div class="inputWrapper">
+                    <input type="text" placeholder="账号" name="user" />
+                </div>
+                <p>第2步：输入密码</p>
+                <div class="inputWrapper">
+                    <input type="password" placeholder="密码" name="password" />
+                    <button type="button" id="changepwd">修改密码</button>
+                </div>
+                <button type="button" id="login" data-url="${self.attr.locationUrl}" disabled>登录</button>
+                <div class="ns_msg"></div>
+                % if self.attr.term:
+                <label class="term"><span class="chkcls"><i class="chk"></i>我已阅读并同意</span><a href="javascript:;">（南沙无线城市上网服务协议）</a></label>
+                % endif
+            </div>
+            % endif
+
+            % if (policy >> 9 & 1) > 0:
+            <div class="boxWrapper">
+                <button type="button" id="weixinAuthor"><i></i>微信一键上网</button>
+            </div>
+            % endif
+        </div>
+    </div>
+
+    % if self.attr.term:
+    <div class="termWrapper">
+        <div class="termbox">
+            <div class="termHeader">无线网络服务条款</div>
+            <div class="termContent">
+                <div>
+                    <h4>用户须知</h4>
+                    <p>根据《计算机信息网络国际联网安全保护管理办法》（公安部令第33号）和《互联网安全保护技术措施规定》（公安部令第82号）的相关要求，制订“公众场所无线网络服务条款”<br>
+                        欢迎使用公众场所提供的无线网络。公众场所提供的无线网络是为顾客提供的一项免费服务项目。在您使用无线网络前请仔细阅读服务条款，一旦您选择“我同意该服务的条款”，则表示您同意接受本许可协议的各项条款，即可进行无线网络连接，本许可协议即可生效并具有法律效力。如果用户不同意此许可协议中的条款，请选择“我不同意该服务的条款”，并且关闭无线网络连接。</p>
+                    <h4>无线上网服务局限</h4>
+                    <p>公众场所无线上网服务是由电信运营商运营的，故该服务您又是电信运营商的顾客，电信运营商可能就使用上述服务要求您接受一些条款和条件。现公众场所提供的无线网络仅您个人用于非商业性目的。您理解并同意：对于无线网络服务中所显示的信息或资料的准确信、内容、完整性、合法性、可靠性、可操作性或可用性，本公众场所不承担任何责任；本公众场所对无线网络服务中的任何信息或材料的删除、存储失败、错误提供或未及时提供不承担任何责任；本公众场所对因通过公众场所提供的无线网络服务下载或访问网上的任何信息或材料而导致的任何损害不承担任何责任；在提供无线上网服务的过程中，本公众场所不保证无线网络不会中断或不会发生错误，不保证与提供无线上网服务有关的网站或服务器无病毒或其他有害组件。</p>
+                    <h4>无线上网服务告知与通信内容</h4>
+                    <p>使用无线上网服务登录互联网本质上是不安全的。当您登录互联网时，您应完全自行负责采取或实施您认为合适的安全手段保护您的隐私或个人信息及财产。对于您的隐私或个人信息及财产因您使用无线上网服务而发生的损失、破坏或遭非法侵入或使用，本公众场所不承担任何责任。<br>
+                        用户在使用无线上网服务过程中提交的信息或其他数据应当被视作用户的个人行为。本公众场所不会对用户由公众场所提供的无线网络发表作品进行任何方式的修改、编辑、归类。若您的通信或发表的作品或您的下载行为有任何损害他人著作权、人格权以及其他合法权利或违反国家法律法规的要求，本公众场所不承担任何责任。公众场所或无线上网服务的提供商可能为执法目的或根据司法或其他政府部门的指令或要求被披露该等用户信息提供协助。</p>
+                    <h4>用户提交内容与信息须知</h4>
+                    <p>用户使用无线上网服务过程中提交的信息或其它数据应视作非专有的和非保密的。本公众场所不承担上述信息与数据任何责任。您承担您提交的信息或数据包括改信息或数据的合法性、可信性或适当性等全部责任。<br>
+                        用户在通过公众场所提供的无线网络登录互联网时，您应当自行负责或实施您认为合适的安全手段保护您的隐私或个人信息及财产。对于您的隐私或个人信息及财产因您使用无线上网服务而遭到泄露、发生损失，破坏或遭非法侵入或使用时，公众场所不承担任何责任。其他一切因使用公众场所提供的无线网络服务而引致至任何意外、疏忽、合约毁坏、诽谤、版权或其他知识产权侵犯及其所造成的损失，本公众场所不承担任何法律责任。本公众场所不对任何由于黑客攻击，计算机病毒、手机病毒侵入或发作，因政府管制而造成的暂时性关闭等影响网络正常经营之不可抗力而造成的个人信息泄露、丢失、误用，变更或毁坏承担任何法律责任。<br>
+                        用户通过手机号码认证或微信认证登录公众场所提供的无线网络，表示同意公众场所可将您认证登录的手机号码或微信号码用于公众场所服务相关用途。为方便您及时了解公众场所的产品、优惠、促销等信息，公众场所将不定期以短信或微信方式发送上述信息至您的手机，接受以上信息免费。公众场所提供退订的选择。若您未退订，则表示您同意本公众场所继续向您发送上述信息。基于上述目的，本公众场所可能会将您的手机号码或微信号提供给关联公司及提供业务支持的供应商（包括但不限于网站运营、技术支持、客服等），在该等情况下，本公众场所将对您的手机号码和微信号严格保密，不会泄露、篡改、出售或非法提供给他人，并要求关联公司及上述第三方遵守此义务。未经您的同意，本公众场所不会将您的手机号码和微信号用于本条载明的其他用途。<br>
+                        对于您的手机号码和微信号，本公众场所将严格保密，不会泄露、篡改、出售或非法提供给他人。但以下情况的披露无需您的同意，且本公众场所不承担任何责任。<br>
+                        a) 满足试用法律、法规、法律程序的要求或强制性的政府要求所做的披露。<br>
+                        b) 执行适合的服务条款（包括调查可能存在的违规情况）所做的披露。<br>
+                        c) 查找、预防或处理欺诈、安全或技术方面的问题所做的披露。<br>
+                        d) 在法律要求或允许的范围内，保护其他用户或公众的权利、财产或安全免遭损害所做的披露。<br>
+                        我们要求家长在其未成年（指18周岁以下）的孩子使用无线上网服务时予以监督。本公众场所无意向18周岁以下的未成年人提供无线网络服务或收集个人信息，家长或监护人应承担未成年人在网络环境下的隐私权的首要责任。请家长或监护人对其子女或被监护人使用公众场所的服务进行监管和责任。由于公众场所的服务无法辨认用户是否为未成年人，因此如有未成年人使用公众场所的服务，则表示其已获得家长或监护人认可，任何相关后果由其家长或监护人承担。</p>
+                    <h4>其他</h4>
+                    <p>使用无线上网服务的用户应当为公众场所及其关联企业免于下列事项遭受任何损害或责任的：a)用户使用无线上网服务的行为。b)用户通过无线上网服务提交、发布、传送或以其他方式展示任何内容。c)用户任何违反本条款的行为。d)用户侵权第三方的任何权利的行为。</p>
+                    <h4>免责声明和责任限制</h4>
+                    <p>无线上网服务系基于其现状而提供的，不附带任何明示或暗示的保证。在任何情况下，对于因使用无线上网服务导致的任何直接或间接损害，或者与使用无线上网服务有关的任何索赔（包括但不限于，通过无线上网服务登录或互联网而导致的任何种类的损失或损害，即使公众场所知晓有发生该等损失或损害的可能），公众场所或其关联企业，或其各自的董事，管理人员，雇员，代理人，承包商，供应商，运营商或许可方（合称“公众场所关联人士”）均不承担任何责任。若本条所述的责任限制被任何使用的法律视作无效，则公众场所及各公众场所关联人士的责任应在法律允许的限度内具有最大程度的责任限制。</p>
+                    <h4>其他说明</h4>
+                    <p>本公众场所在法律允许范围内可以修改本条款或相关条款并会予以更新和公布，所有修改的适用不具有追溯力。但是对服务新功能的特别修改或其他原因所做的修改将立即生效。如果您不同意服务修改条款，应当停止使用本公众场所的服务。</p>
+                </div>
+            </div>
+            <div class="termFooter">
+                <label><span class="chkcls"><i class="chk"></i>我已阅读并同意</span></label>
+                <button type="button" id="termCheck">确定</button>
+            </div>
+        </div>
+    </div>
+    % endif
+
+    <%include file="hidwx.html" />
+<script>
+    % if (policy >> 9 & 1) > 0:
+    document.addEventListener('visibilitychange', putNoResponse, false);
+    % endif
+    $(function(){
+        % if (policy >> 9 & 1) > 0:
+        $('#weixinAuthor').click(function(){
+            Wechat_GotoRedirect('${appid}', '${extend}', '${timestamp}', '${sign}', '${shopid}', '${authUrl}', '${user_mac}', '${ssid}', '${ap_mac}');
+        });
+        % endif
+
+        % if self.attr.owlStatic:
+        $('#banner').owlCarousel({
+            items: 1,
+            loop: true,
+            center: true,
+            autoplay: true
+        });
+        % else:
+        function NewsHot(){this.data = '';}
+        NewsHot.prototype.getNewsImg = function(){
+            var self = this;
+            $.ajax({
+                method: 'get',
+                url: '${self.attr.cmsUrl}/message?groups=${groups}&ap_groups=${ap_groups}&page=0&per=3',
+                dataType: "json"
+            }).done(function(data){
+                console.log(data);
+                self.data = data;
+                self.renderBanner(data);
+            }).fail(function(error){
+                console.log(error);
+            });
+        };
+        NewsHot.prototype.renderBanner = function(data){
+            if(data.messages.length>0){
+                for(var i= 0, h=''; i<data.messages.length; i++){
+                    var mes=data.messages[i];
+                    var img = (mes.image=='' ? "" : '<img src="${self.attr.cmsImgUrl}'+mes.image+'" />');
+                    h+='<a href="${self.attr.cmsUrl}/message/'+mes.id+'">'+
+                        img+
+                        '<p>'+mes.title+'</p>'+
+                        '<span class="shadow"></span>'+
+                    '</a>';
+                }
+                $('#banner').html(h);
+                if(data.messages.length>1){
+                    $('#banner').owlCarousel({
+                        items: 1,
+                        loop: true,
+                        center: true,
+                        autoplay: true
+                    });
+                }else{
+                    $('#banner').owlCarousel({
+                        items: 1,
+                        loop: false,
+                        center: true,
+                        autoplay: false
+                    });
+                }
+            }
+        };
+        var Getnews = new NewsHot();
+        Getnews.getNewsImg();
+        % endif
+
+        $('.FormAccount').auPortal({
+            user: '${user}',
+            password: '${password}',
+            openid: '${openid}',
+            ac_ip: '${ac_ip}',
+            vlanId: '${vlan}',
+            ssid: '${ssid}',
+            user_ip: '${user_ip}',
+            user_mac: '${user_mac}',
+            ap_mac: '${ap_mac}',
+            firsturl: '${firsturl}',
+            urlparam: '${urlparam}',
+            appid: '${appid}',
+            shopid: '${shopid}',
+            pn: '${pn}',
+            policy: ${policy},
+
+            ismobile: ('${ismobile}'=='True' ? true : false)
+        });
+    });
+</script>
+</body>
+</html>
+<%!
+    title = u"南沙无线城市";
+    name = u"南沙无线城市";
+    term = False;
+    owlStatic = ['adimgs/nansha01.jpg', 'adimgs/nansha02.jpg', 'adimgs/nansha03.jpg'];
+    cmsUrl = 'http://cms.cniotroot.cn';
+    cmsImgUrl = 'http://cms.cniotroot.cn';
+    locationUrl = '';
+%>

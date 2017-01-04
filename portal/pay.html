@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>广东女子职业技术学院-充值</title>
+    <style>
+        *{margin:0;padding:0}
+        body{font-family:"microsoft yahei","Helvetica Neue Light",HelveticaNeue-Light,"Helvetica Neue",Calibri,Helvetica,Arial;font-size:16px;color:#222;background:#ececec}
+        h1,h2,h3,h4,h5,h6{font-weight:400}
+        em{font-style:normal}
+        li{list-style:none}
+        button,input{outline:0;border:none;font-family:"microsoft yahei","Helvetica Neue Light",HelveticaNeue-Light,"Helvetica Neue",Calibri,Helvetica,Arial}
+        .btn{width:120px;height:40px;font-size:16px;background:#149ae3;color:#fff;border-radius:5px}
+        .btn:hover{background:#067fcb}
+        .bdbtn{width:100px;height:30px;font-size:14px;border:1px solid #37a4e3;background:#fff;color:#149ce4;border-radius:5px}
+        .bdbtn:hover{background:#149ce4;color:#fff}
+        .wrapper{width:1000px;margin:0 auto;position:relative;box-sizing:border-box}
+        .header{height:70px;background:#11a6e6;background:-webkit-linear-gradient(left,#149ae3,#08cff3);background:-o-linear-gradient(right,#149ae3,#08cff3);background:-moz-linear-gradient(right,#149ae3,#08cff3);background:linear-gradient(to right,#149ae3,#08cff3)}
+        .header .logo{background:url(/images/pay/logo_school.png) no-repeat;width:auto;height:52px;line-height:52px;text-indent:40px;color:#fff;font-size:24px;position:absolute;top:9px;left:0}
+        .header .welcome{position:absolute;right:0;top:9px}
+        .header .welcome .welcomeTip{color:#fff}
+        .header .welcome .welcomeImg{display:inline-block;vertical-align:middle;margin-left:10px}
+        .welcomeImg img{display:block;width:50px;height:50px;border-radius:50%}
+        .footer{background:#ddd;height:140px}
+        .footer p{text-align:center;font-size:14px;color:#777;white-space:pre;line-height:2}
+        .footer .wrapper{padding-top:40px}
+        .payWrapper .wrapper{padding:20px 0 20px 80px;margin:20px auto 90px;background:#fff}
+        .payBox>h3{color:#666;font-size:16px;position:relative}
+        .payBox>h3 em{background:#fff;display:inline-block;padding-right:20px;position:relative;z-index:2}
+        .payBox>h3:before{content:'';display:block;width:100%;height:1px;background:#e7e7e7;position:absolute;top:50%;left:0;z-index:1}
+        .payBox>div{margin:20px 0}
+        .personInfo>div img{display:inline-block;width:90px;height:90px;margin-right:15px}
+        .personInfo>div ul{display:inline-block;vertical-align:top}
+        .personInfo>div li{line-height:1;margin-bottom:20px;font-size:16px}
+        #exHours{margin-left:20px}
+        .policyList>div span{width:180px;height:50px;line-height:50px;text-align:center;background:#e8faff;border:1px solid #37a4e3;border-radius:5px;display:inline-block;margin-right:35px;margin-bottom:20px;cursor:default;font-size:20px;color:#149ce4}
+        .policyList>div span.on,.policyList>div span:hover{background:#149ce4;color:#fff}
+        .policyList p{color:#999;text-align:center;position:relative;margin-left:-80px}
+        .payWay>div{font-size:20px}
+        .payWay>div label em{background:url(/images/pay/radio.png) 0 -26px no-repeat;width:26px;height:26px;display:inline-block;vertical-align:middle;margin-left:30px}
+        .payWay>div label em.on{background-position:0 0}
+        .alipay>i{background:url(/images/pay/alipay.png) no-repeat;width:36px;height:36px;display:inline-block;vertical-align:middle;margin-right:10px}
+        .btngroups{text-align:center}
+        .pcHelp li{margin:16px 0}
+        .pcHelp li>i{background:url(/images/pay/pchelp.png) no-repeat;width:36px;height:36px;display:inline-block;vertical-align:middle;margin-right:10px}
+        .pcHelp li>i.helpIco01{background-position:0 0}
+        .pcHelp li>i.helpIco02{background-position:0 -36px}
+        .pcHelp li>i.helpIco03{background-position:0 -72px}
+        .pcHelp li div{display:inline-block;vertical-align:middle;font-size:18px;position:relative;width:90%}
+        .pcHelp li div .pcpwd{color:#666;position:absolute;display:block;white-space:pre}
+        .modal{background:rgba(0,0,0,.2);position:fixed;top:0;left:0;right:0;bottom:0;z-index:10;display:none}
+        .exTimeModal{width:500px;height:264px;background:#fff;border-radius:5px;overflow:hidden;position:absolute;top:50%;left:50%;margin-top:-132px;margin-left:-250px;z-index:11}
+        .exTimeModal>h3{text-align:center;font-size:20px;height:66px;line-height:66px;background:#f5f5f5}
+        .exTimeModal>div{text-align:center;padding-top:25px}
+        .exTimeModal>div p{font-size:18px}
+        .exTimeModal>div p span{color:#149ae3}
+        .exTimeModal>div input{width:250px;height:36px;background:#f5f5f5;border:1px solid #d8d8d8;display:block;margin:10px auto 25px;border-radius:5px;text-align:center;font-size:16px}
+        .exTimeModal .closed{position:absolute;right:0;top:0;display:block;padding:10px}
+        .exTimeModal .closed i{background:url(/images/pay/close.png) no-repeat;width:18px;height:18px;display:block}
+        .exTimeModal .closed:hover i{background-position:0 -18px}
+        .errmsg{margin-top:5px;color:#ff6138}
+        #pay{margin-left:-80px}
+        #pay.disbtn{background:#999}
+        .errorWrapper{background:#fff;padding:8px 0}
+        .errorBox{position:relative;width:1312px;margin:0 auto}
+        .errorBox img{display:block}
+        .error{position:absolute;top:0;left:0;width:326px;height:220px;background:#F1F1F1;display:table}
+        .error p{display:table-cell;vertical-align:middle;text-align:center;font-size:16px;font-weight:700;color:#e95032;padding:0 20px}
+        @media screen and (max-width:1312px){.footer,.header,.payWrapper,.errorWrapper{width:1312px}}
+    </style>
+    <script src="/js/lib/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="wrapper">
+            <h1 class="logo">广东女子职业技术学院网络充值</h1>
+            <div class="welcome">
+                <span class="welcomeTip">${user}您好，欢迎登录</span><span class="welcomeImg">
+                    % if photo:
+                    <img src="${photo}" />
+                    % else:
+                    <img src="/images/face.jpg" />
+                    % endif
+                </span>
+            </div>
+        </div>
+    </div>
+    % if code != 200:
+    <div class="errorWrapper">
+        <div class="errorBox">
+            <div class="error">
+                <p>认证失败：${msg}</p>
+            </div>
+            <img src="/images/help/error/tp.jpg" />
+        </div>
+    </div>
+    % endif
+    <div class="payWrapper">
+        <div class="wrapper">
+            <div class="payForm">
+                <div class="payBox personInfo">
+                    <h3><em>个人信息</em></h3>
+                    <div>
+                        % if photo:
+                        <img src="${photo}" />
+                        % else:
+                        <img src="/images/face.jpg" />
+                        % endif
+                        <ul>
+                            <li>姓名：${user}</li>
+                            <li>手机号：${mobile}</li>
+                            <li>到期时间：${expired}</li>
+                        </ul>
+                        <button type="button" class="bdbtn" id="exHours">兑换</button>
+                    </div>
+                </div>
+                <div class="payBox policyList">
+                    <h3><em>选择上网套餐</em></h3>
+                    <div id="policyList"></div>
+                </div>
+                <div class="payBox payWay">
+                    <h3><em>选择支付方式</em></h3>
+                    <div>
+                        <label class="alipay"><i></i>支付宝<em class="on"></em></label>
+                    </div>
+                    <div class="btngroups">
+                        <button type="button" class="btn" id="pay">确定</button>
+                    </div>
+                </div>
+            </div>
+            <div class="payBox pcHelp">
+                <h3><em>家用电脑上网指南</em></h3>
+                <ul>
+                    <li><i class="helpIco01"></i><div><span>选择WiFI：${ssid}</span></div></li>
+                    <li><i class="helpIco02"></i><div><span>打开浏览器</span></div></li>
+                    <li><i class="helpIco03"></i><div><span>输入以下内容</span><span class="pcpwd">账号：${user}      密码：${password}</span></div></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="wrapper">
+            <p>版权所有：广州中国科学院计算机网络信息中心</p>
+            <p>电话：020-39393309        邮箱：iot_support@niot.cn</p>
+        </div>
+    </div>
+    <div class="modal exTime">
+        <div class="exTimeModal">
+            <h3>上网时间兑换</h3>
+            <div>
+                <p>亲，您有<span><em class="exH">${ex_hours}</em>小时</span>的上网时间可兑换</p>
+                <input type="number" placeholder="输入小时数" name="hours" min="1" />
+                <button type="button" class="btn" id="excharge">立即兑换</button>
+                <div class="errmsg"></div>
+            </div>
+            <span class="closed"><i></i></span>
+        </div>
+    </div>
+<script>
+    $(function(){
+        var payURL = 'http://mp.bidongwifi.com';
+        // 套餐
+        function renderPolicy(){
+            $.ajax({
+                method: "get",
+                url: payURL + "/app/v1.0/paypolicy/",
+                data: {
+                    mobile: '${mobile}',
+                    user: '${user}',
+                    package: 'com.niot.fst'
+                },
+                dataType: "json",
+                success: function (data) {
+                    if( (data.code==200) && (data.policys.length>0)){
+                        for(var i=0, h=''; i<data.policys.length; i++){
+                            var policy=data.policys[i];
+                            h += '<span data-id="'+policy.id+'">'+policy.label+'</span>';
+                        }
+                        $('#policyList').html(h);
+                    }else{
+                        $('#policyList').html('<p>没有可用套餐</p>');
+                        $('#pay').addClass('disbtn').attr('disabled', true);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        renderPolicy();
+        // 兑换时间
+        $(document).on('click', '#exHours', function(){$('.exTime').fadeIn();});
+        $(document).on('click', '.exTime .closed', function(){
+            $('.exTime').fadeOut('normal', function(){
+                $(this).find('input').val('');
+                $(this).find('.errmsg').text('');
+            });
+        });
+        $(document).on('click', '#excharge', function(){
+            var $modal = $('.exTime');
+            var hours = parseInt($modal.find('input[name=hours]').val()),
+                exhours = parseInt($modal.find('.exH').text());
+            if(hours=='' || (!(/^[\d]+$/.test(hours)))){
+                $modal.find('.errmsg').text('需填写兑换小时数');
+                $modal.find('input[name=hours]').focus();
+                return false;
+            }
+//            if(hours > exhours){
+//                $modal.find('.errmsg').text('超出可兑换小时数');
+//                return false;
+//            }
+            $modal.find('.errmsg').text('');
+            var param = {
+                user: '${user}',
+                minutes: hours * 60
+            };
+            console.log(param);
+            $.ajax({
+                method: "post",
+                url: payURL + "/app/v1.0/exchange/",
+                data: param,
+                dataType: "json",
+                success: function (data) {
+                    if(data.code==200){
+                        console.log(data);
+                        alert('兑换成功！');
+                        window.location.reload();
+                    }else{
+                        $modal.find('.errmsg').text(data.reason);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    $modal.find('.errmsg').text('兑换失败，请重新兑换！');
+                }
+            });
+        });
+        // 套餐充值
+        function PAY(){
+            this.user = '${user}';
+            this.package = 'com.niot.fst';
+            this.pay_policy_id = '';
+            this.return_url = window.location.href;
+        }
+        PAY.prototype.payHandle = function(){
+            var self = this;
+            $(document).on('click', '#policyList span', function(){
+                $(this).addClass('on').siblings().removeClass('on');
+                self.pay_policy_id = $(this).data('id');
+            });
+            $(document).on('click', '#pay', function(){
+                var $this = $(this);
+                if(self.pay_policy_id==''){
+                    alert("请选择一种上网套餐！");
+                    return false;
+                }
+                $this.attr('disabled', true);
+                $.ajax({
+                    method: "get",
+                    url: payURL + "/alipay/recharge/",
+                    data: {
+                        user: self.user,
+                        package: self.package,
+                        pay_policy_id: self.pay_policy_id,
+                        return_url: self.return_url
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if(data.code==200){
+                            console.log(data);
+                            window.location.href = data.url;
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        $this.attr('disabled', false);
+                    }
+                });
+            });
+        };
+        var pay = new PAY();
+        pay.payHandle();
+    });
+</script>
+</body>
+</html>

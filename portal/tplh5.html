@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>${config['title']}</title>
+    <style type="text/css">
+        *{margin:0;padding:0}
+        body{font-family:"microsoft yahei",Arial,Helvetica,sans-serif;font-size:16px}
+        button{-webkit-user-select:none;user-select:none;border:none}
+        a,button,input{-webkit-tap-highlight-color:transparent;outline:0;font-family:"microsoft yahei","Helvetica Neue Light",HelveticaNeue-Light,"Helvetica Neue",Calibri,Helvetica,Arial}
+        .FormAccount{position:relative;margin:0 auto}
+        .bg{width:100%;display:block}
+        .FormAccount>h1{padding:0 21px;box-sizing:border-box;font-size:32px;font-weight:400;color:#fff;text-align:center;text-shadow:0 2px 4px rgba(0,0,0,.8);position:absolute;top:20%;left:0;width:100%}
+        .contentWrapper{box-sizing:border-box;opacity:.8;background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.8) 50%,rgba(0,0,0,0) 100%);position:absolute;bottom:10%;left:0;width:100%;z-index:3;height:280px}
+        .boxWrapper{padding:0 21px;box-sizing:border-box;position:absolute;top:50%;left:0;width:100%}
+        .appDownload,#weixinAuthor{width:100%;color:#fff;font-size:16px;padding:11px 0;border-radius:7px;border:none;margin-bottom:15px}
+        .appDownload{display:block;text-align:center;background:#51adf1;border-bottom:2px solid #489bd8;text-decoration:none}
+        #weixinAuthor{padding:8px 0;background:#2fe033;border-bottom:2px solid #40c243}
+        #weixinAuthor i{background:url(/images/weixin_ico.png) no-repeat;background-size:33px;width:33px;height:27px;display:inline-block;vertical-align:middle;margin-right:7px}
+        #weixinAuthor:active{background:#2bd330;border-bottom:2px solid #38bf37}
+        .appDownload:active{background:#43a0de;border-bottom:2px solid #4595cf}
+        #portal_zone{font-size:16px;width:100%}
+        #portal_zone button,#portal_zone input{font-size:13px;-webkit-appearance:none;border-radius:7px}
+        #portal_zone div{position:relative;border:1px solid #d9d9d9;background:#efefef;margin-bottom:10px;border-radius:7px}
+        #portal_zone div input{width:100%;padding:14px 0;text-indent:18px;box-sizing:border-box;border:none;background:0 0}
+        #portal_zone #portal_login{background:#fea520;border:none;border-bottom:2px solid #d38b1f;color:#fff;width:100%;padding:11px 0;font-size:16px}
+        #portal_zone #portal_login:active{background:#ed9a20;border-bottom:2px solid #d48b1f}
+        #portal_yzm,#portal_changePwd{color:#489ad8;position:absolute;right:0;top:0;padding:14px 0;width:100px;border:none;background:0 0;cursor:pointer;text-decoration:underline}
+
+        .ns_zz{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:2;display:none}
+        .ns_zz>div{position:absolute;top:15%;left:5%;width:90%;background:#fff;border-radius:5px;box-sizing:border-box;padding:20px 20px 30px}
+        .ns_zz h3{text-align:center;font-size:16px}
+        .ns_zz .btngroups{text-align:center}
+        .ns_zz .btngroups button{color:#fff;font-size:16px;padding:10px 0;border-radius:8px;width:40%;margin:0 5%}
+        #dmSub,#cgSub{background:#6fccf7}
+        #dmQuit,#cgQuit{background:#9e9e9e}
+        .ns_dmc .dmlist{margin:20px 0;height:170px;overflow-y:auto}
+        .ns_dmc label{width:90%;display:table;margin:10px auto}
+        .ns_dmc input{display:table-cell;vertical-align:middle;width:20px;height:20px}
+        .ns_dmc span{display:table-cell;font-size:16px;vertical-align:middle;padding:0 10px}
+        .ns_cgpwd .cgpwd{margin:20px 0}
+        .ns_cgpwd .cgpwd li{font-size:16px;margin:10px 0;display:-webkit-box;display:box}
+        .ns_cgpwd .cgpwd li label{width:100px;line-height:40px;display:inline-block}
+        .ns_cgpwd .cgpwd li>div{-webkit-box-flex:1;box-flex:1;border:thin solid #cecece;border-radius:7px;overflow:hidden}
+        .ns_cgpwd .cgpwd li input{height:40px;width:100%;text-indent:15px;border:none}
+
+        % if not ismobile:
+        .ns_zz>div{position:relative;top:0;left:0;width:405px;height:346px;margin:10% auto;padding:30px 40px}
+        .ns_zz h3{font-size:18px}
+        .ns_zz .btngroups{margin-top:20px}
+        .ns_zz .btngroups button{width:120px;height:40px;background:#6bb2ff;color:#fff;border-radius:5px;margin:0 10px;border:none;font-family:"microsoft yahei", "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;font-size:16px}
+        .ns_dmc .dmlist{height:175px}
+        .ns_dmc label{width:100%;margin-bottom:10px}
+        .ns_dmc input{width:18px;height:18px}
+        .ns_cgpwd .cgpwd{margin:30px 0}
+        .ns_cgpwd .cgpwd li{display:block;font-size:16px;margin:10px 0}
+        .ns_cgpwd .cgpwd li label{width:32%;vertical-align:middle}
+        .ns_cgpwd .cgpwd li>div{width:67%;border:1px solid #cecece;display:inline-block;vertical-align:middle;box-sizing:border-box}
+
+        .FormAccount{width:600px\0;margin:0 auto\0;height:100%\0;background:#fff\0;border-left:1px solid #999\0;border-right:1px solid #999\0}
+
+        @media screen and (min-width: 415px)  {
+            .FormAccount{width:600px;margin:0 auto;height:100%;background:#fff;box-shadow:0 0 3px 5px rgba(0,0,0,0.1)}
+        }
+        %endif
+    </style>
+    <script src="/js/lib/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="FormAccount">
+        <img src="${config['pic']}" class="bg" />
+        <h1>${config['title']}</h1>
+        <div class="contentWrapper">
+            <div class="boxWrapper">
+                % if (policy >> 9 & 1) > 0:
+                <button type="button" id="weixinAuthor"><i></i>微信上网</button>
+                % endif
+                <!--<a href="javascript:;" class="appDownload">APP下载</a>-->
+                % if ((policy>>10 & 1) | (policy>>8 & 1)) > 0:
+                <div id="login"></div>
+                % endif
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="ns_zz ns_dmc">-->
+        <!--<div>-->
+            <!--<h3>选择下线设备</h3>-->
+            <!--<div class="dmlist"></div>-->
+            <!--<div class="btngroups">-->
+                <!--<button type="button" id="dmSub">确定</button><button type="button" id="dmQuit">取消</button>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <div class="ns_zz ns_cgpwd">
+        <div>
+            <h3>修改密码</h3>
+            <ul class="cgpwd">
+                <li><label>输入旧密码：</label><div><input type="password" name="oldpwd" /></div></li>
+                <li><label>输入新密码：</label><div><input type="password" name="newpwd" /></div></li>
+                <li><label>确认新密码：</label><div><input type="password" name="new2pwd" /></div></li>
+            </ul>
+            <div class="btngroups">
+                <button type="button" id="cgSub">确定</button><button type="button" id="cgQuit">取消</button>
+            </div>
+        </div>
+    </div>
+
+    % if ((policy>>10 & 1) | (policy>>8 & 1)) > 0:
+    <script type="text/javascript" src="/js/portal.js"></script>
+    <script type="text/javascript">
+        Portal.auth({
+            target: document.getElementById('login'),
+            openid: '${openid}',
+            ac_ip: '${ac_ip}',
+            vlanId: '${vlan}',
+            ssid: '${ssid}',
+            user_ip: '${user_ip}',
+            user_mac: '${user_mac}',
+            ap_mac: '${ap_mac}',
+            firsturl: '${firsturl}',
+            urlparam: '${urlparam}',
+            appid: '${appid}',
+            shopid: '${shopid}',
+            pn: '${pn}',
+            policy: '${policy}'
+        });
+    </script>
+    % endif
+    % if (policy >> 9 & 1) > 0:
+    <script type="text/javascript">
+        //weixin-portal
+        var loadIframe = null;
+        var noResponse = null;
+        var callUpTimestamp = 0;
+
+        function putNoResponse(ev){
+            clearTimeout(noResponse);
+        }
+
+        function errorJump()
+        {
+            var now = new Date().getTime();
+            if((now - callUpTimestamp) > 4*1000){
+                return;
+            }
+            alert('该浏览器不支持自动跳转微信请手动打开微信\n如果已跳转请忽略此提示');
+        }
+
+        myHandler = function(error) {
+            errorJump();
+        };
+
+        function createIframe(){
+            var iframe = document.createElement("iframe");
+            iframe.style.cssText = "display:none;width:0px;height:0px;";
+            document.body.appendChild(iframe);
+            loadIframe = iframe;
+        }
+
+        function jsonpCallback(result){
+            if(result && result.success){
+            // alert('WeChat will call up : ' + result.success + '  data:' + result.data);
+                var ua=navigator.userAgent;
+                if (ua.indexOf("iPhone") != -1 ||ua.indexOf("iPod")!=-1||ua.indexOf("iPad") != -1) {   //iPhone
+                    document.location = result.data;
+                }else{
+                    createIframe();
+                    callUpTimestamp = new Date().getTime();
+                    loadIframe.src=result.data;
+                    noResponse = setTimeout(function(){
+                        errorJump();
+                    },3000);
+                }
+            }else if(result && !result.success){
+                alert(result.data);
+            }
+        }
+        function Wechat_GotoRedirect(appId, extend, timestamp, sign, shopId, authUrl, mac, ssid, bssid){
+            var url = "https://wifi.weixin.qq.com/operator/callWechatBrowser.xhtml?appId=" + appId
+                    + "&extend=" + extend
+                    + "&timestamp=" + timestamp
+                    + "&sign=" + sign;
+
+            if(authUrl && shopId){
+                url = "https://wifi.weixin.qq.com/operator/callWechat.xhtml?appId=" + appId
+                + "&extend=" + extend
+                + "&timestamp=" + timestamp
+                + "&sign=" + sign
+                + "&shopId=" + shopId
+                + "&authUrl=" + encodeURIComponent(authUrl)
+                + "&mac=" + mac
+                + "&ssid=" + ssid
+                + "&bssid=" + bssid;
+            }
+
+            var script = document.createElement('script');
+            script.setAttribute('src', url);
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
+
+        document.addEventListener('visibilitychange', putNoResponse, false);
+        document.getElementById('weixinAuthor').onclick = function(){
+            Wechat_GotoRedirect('${appid}', '${extend}', '${timestamp}', '${sign}', '${shopid}', '${authUrl}', '${user_mac}', '${ssid}', '${ap_mac}');
+        };
+    </script>
+    % endif
+    <script>
+        function resizeZW(){
+            var zw = document.getElementsByClassName('boxWrapper')[0];
+            var h = zw.offsetHeight;
+            zw.style.marginTop = -Math.ceil(h/2)+"px";
+        }
+        resizeZW();
+        document.body.addEventListener('touchstart', function(){});
+        $(function(){
+            // 2016-12-05新增
+            // 修改密码
+            function hidecgpwd(){
+                $('.ns_cgpwd').fadeOut('normal', function(){
+                    $('.ns_cgpwd input').val('');
+                });
+            }
+            $(document).on('click', '#portal_changePwd', function(){
+                var user = $('input[name=portal_user]').val();
+                if(user==''){
+                    alert('请输入账号！');
+                    $('input[name=portal_user]').focus();
+                    return false;
+                }
+                $('.ns_cgpwd').fadeIn();
+            });
+            $(document).on('click', '#cgQuit', function(){hidecgpwd();});
+            $(document).on('click', '#cgSub', function(){
+                var user = $('input[name=portal_user]').val();
+                var $cgpwd = $('.ns_cgpwd .cgpwd');
+                var $oldpwd = $cgpwd.find('input[name=oldpwd]'),
+                    $newpwd= $cgpwd.find('input[name=newpwd]'),
+                    $new2pwd= $cgpwd.find('input[name=new2pwd]');
+                var oldpwd = $oldpwd.val(),
+                    newpwd = $newpwd.val(),
+                    new2pwd = $new2pwd.val();
+                if(oldpwd==''){$oldpwd.focus();return false;}
+                if(newpwd==''){$newpwd.focus();return false;}
+                if(new2pwd==''){$new2pwd.focus();return false;}
+                if(newpwd==new2pwd){
+                    var param = {
+                        newp: newpwd,
+                        password: oldpwd
+                    };
+                    $.ajax({
+                        method: "put",
+                        url: "/wnl/account/"+user,
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(param),
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            alert("修改密码成功");
+                            hidecgpwd();
+                        },
+                        error: function (error) {
+                            try{
+                                alert('修改密码失败：'+error.responseJSON.Msg);
+                            }catch(e) {
+                                alert('修改密码失败，请重新提交！');
+                            }
+                        }
+                    });
+                }else{
+                    alert("两次新密码不一致!");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
