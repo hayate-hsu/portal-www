@@ -145,7 +145,7 @@
             if((deptId == dept) && canyzm){
                 // 发送验证码
                 $('#deptWrapper').next('.hz_msg').text('验证码已经发送到您的手机，请注意查收!');
-                        $('#deptWrapper>div').html('<span>60</span>秒后重新获取验证码').show();
+                        $('#deptWrapper>div').html('<span>300</span>秒后重新获取验证码').show();
                         delayDept();
                 $.ajax({
                     method: "post",
@@ -159,7 +159,7 @@
                     success: function(data){
                         verify = data.verify;
                         $('#deptWrapper').next('.hz_msg').text('验证码已经发送到您的手机，请注意查收!');
-                        $('#deptWrapper>div').html('<span>60</span>秒后重新获取验证码').show();
+                        $('#deptWrapper>div').html('<span>300</span>秒后重新获取验证码').show();
                         delayDept();
                     },
                     error: function(msg){
