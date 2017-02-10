@@ -8,7 +8,9 @@
     <meta name="format-detection" content="telephone=no"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>${self.attr.title}</title>
+    % if not self.attr.autoBanner:
     <link rel="stylesheet" href="/css/owl.css" />
+    % endif
     <style type="text/css">
         *{margin:0;padding:0}
         body,html{width:100%;height:100%}
@@ -94,12 +96,17 @@
     </style>
     <%namespace file="base.html" name="jscode" />
     ${jscode.jscode()}
+    % if not self.attr.autoBanner:
     <script type="text/javascript" src="/js/lib/owl.min.js"></script>
+    % endif
 </head>
 
 <body>
     <div class="FormAccount">
-        <div class="header"><i></i>欢迎连接${self.attr.name}wifi</div>
+        <div class="header"><i></i>${self.attr.name}</div>
+        % if self.attr.autoBanner:
+        <%block name="autoBanner" />
+        % else:
         <div id="banner" class="owl-carousel">
             % if len(owlStatic) > 0:
             % for ad in owlStatic:
@@ -113,6 +120,7 @@
             <!--</a>-->
             % endif
         </div>
+        % endif
 
         <div class="contentWrapper">
 
@@ -234,6 +242,7 @@
         });
         % endif
 
+        % if not self.attr.autoBanner:
         % if self.attr.owlStatic:
         $('#banner').owlCarousel({
             items: 1,
@@ -289,6 +298,7 @@
         var Getnews = new NewsHot();
         Getnews.getNewsImg();
         % endif
+        % endif
 
         $('.FormAccount').auPortal({
             user: '${user}',
@@ -315,10 +325,11 @@
 </html>
 <%!
     title = u"南沙无线城市";
-    name = u"南沙无线城市";
+    name = u"欢迎连接南沙无线城市WiFi";
     term = False;
     owlStatic = ['adimgs/nansha01.jpg', 'adimgs/nansha02.jpg', 'adimgs/nansha03.jpg'];
     cmsUrl = 'http://cms.cniotroot.cn';
     cmsImgUrl = 'http://cms.cniotroot.cn';
     locationUrl = '';
+    autoBanner = False;
 %>

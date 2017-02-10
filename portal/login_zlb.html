@@ -6,8 +6,17 @@
     <%include file="appDownloadTpl.html" args="appTitle=u'客户端下载', appname=u'助联邦APP', appIos='http://www.zlbcn.com/zlbapp.html', appAndriod='http://www.zlbcn.com/zlbapp.html', appCtx=[]" />
 </%block>
 
+<%block name="autoBanner">
+    <div style="background:#52CFFC;height:200px">
+        <div style="padding-top:40px">
+            <img src="/images/adimgs/zlb_logo.jpg" width="160" height="34" style="margin:0 auto;display:block" />
+            <p style="font-size:20px;color:#fff;text-align:center;margin-top:40px">助联帮，成就和谐智慧社区</p>
+        </div>
+    </div>
+</%block>
+
 <%!
-    title = u"助联邦wifi";
-    name = u"联通网络阳光新苑公共";
-    ##owlStatic = [];
+    title = u"联通网络阳光新苑专用WIFI";
+    name = u"联通网络阳光新苑专用WIFI";
+    autoBanner = True;
 %>
