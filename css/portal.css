@@ -10,7 +10,8 @@ input[type=checkbox]{border:thin solid #d9d9d9;width:15px;height:15px;vertical-a
 button{-webkit-user-select:none;user-select:none}
 .footer{text-align:center;padding:30px 0}
 .header{position:relative}
-.header div{background:url(../images/dw_ico.png) no-repeat;background-size:13px;height:19px;line-height:19px;color:#5383a5;position:absolute;bottom:10px;left:18px;text-indent:20px}
+.header .banner-name{background:url(../images/dw_ico.png) no-repeat;background-size:13px;height:19px;line-height:19px;color:#5383a5;position:absolute;bottom:10px;left:18px;text-indent:20px}
+.header .banner-panel{position:absolute;top:35%;left:0;text-indent:20px;font-size:28px}
 .bannerBg{display:block;width:100%}
 .boxWrapper{padding:15px 21px;border-top:2px solid #f5f5f5}
 div.boxWrapper:first-child{border:none}

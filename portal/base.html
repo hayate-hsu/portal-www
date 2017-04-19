@@ -58,7 +58,11 @@
             % if self.attr.autoAccount:
             <button type="button" id="autoAccount">一键认证</button>
             % endif
-            <div>${self.attr.bannerText}</div>
+            % if self.attr.panelName:
+            <div class="banner-name">${self.attr.bannerText}</div>
+            % else:
+            <div class="banner-panel">${self.attr.bannerText}</div>
+            % endif
         </div>
 
         <div class="contentWrapper">
@@ -203,4 +207,5 @@
     qrcode = False;             ##二维码
     autoAccount = False;        ##自动认证
     locationUrl = '';           ##指定跳转URL
+    panelName = True;
 %>
