@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">-->
     <meta name="format-detection" content="telephone=no"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>广东女子职业技术学院-充值</title>
+    <title>同聚城网络充值-充值</title>
     <style>
         *{margin:0;padding:0}
         body{font-family:"microsoft yahei","Helvetica Neue Light",HelveticaNeue-Light,"Helvetica Neue",Calibri,Helvetica,Arial;font-size:16px;color:#222;background:#ececec}
@@ -38,7 +38,7 @@
         .personInfo>div ul{display:inline-block;vertical-align:top}
         .personInfo>div li{line-height:1;margin-bottom:20px;font-size:16px}
         #exHours{margin-left:20px}
-        .policyList>div span{width:180px;height:50px;line-height:50px;text-align:center;background:#e8faff;border:1px solid #37a4e3;border-radius:5px;display:inline-block;margin-right:35px;margin-bottom:20px;cursor:default;font-size:20px;color:#149ce4}
+        .policyList>div span{width:180px;height:50px;line-height:50px;text-align:center;background:#e8faff;border:1px solid #37a4e3;border-radius:5px;display:inline-block;margin-right:35px;margin-bottom:20px;cursor:default;font-size:20px;color:#149ce4;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
         .policyList>div span.on,.policyList>div span:hover{background:#149ce4;color:#fff}
         .policyList p{color:#999;text-align:center;position:relative;margin-left:-80px}
         .payWay>div{font-size:20px}
@@ -79,7 +79,7 @@
 <body>
     <div class="header">
         <div class="wrapper">
-            <h1 class="logo">广东女子职业技术学院网络充值</h1>
+            <h1 class="logo">同聚城网络充值</h1>
             <div class="welcome">
                 <span class="welcomeTip">${user}您好，欢迎登录</span><span class="welcomeImg">
                     % if photo:
@@ -139,7 +139,7 @@
                 <ul>
                     <li><i class="helpIco01"></i><div><span>选择WiFI：${ssid}</span></div></li>
                     <li><i class="helpIco02"></i><div><span>打开浏览器</span></div></li>
-                    <li><i class="helpIco03"></i><div><span>输入以下内容</span><span class="pcpwd">账号：${user}      密码：${password}</span></div></li>
+                    <!--<li><i class="helpIco03"></i><div><span>输入以下内容</span><span class="pcpwd">账号：${user}      密码：${password}</span></div></li>-->
                 </ul>
             </div>
         </div>
@@ -169,18 +169,16 @@
         function renderPolicy(){
             $.ajax({
                 method: "get",
-                url: payURL + "/app/v1.0/paypolicy/",
+                url: payURL + "/paypolicy/list",
                 data: {
-                    mobile: '${mobile}',
-                    user: '${user}',
-                    package: 'com.niot.fst'
+                    location: getParam('location')
                 },
                 dataType: "json",
                 success: function (data) {
                     if( (data.code==200) && (data.policys.length>0)){
                         for(var i=0, h=''; i<data.policys.length; i++){
                             var policy=data.policys[i];
-                            h += '<span data-id="'+policy.id+'">'+policy.label+'</span>';
+                            h += '<span data-id="'+policy.id+'" title="'+policy.label+'">'+policy.label+'</span>';
                         }
                         $('#policyList').html(h);
                     }else{
@@ -287,6 +285,11 @@
         var pay = new PAY();
         pay.payHandle();
     });
+    function getParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2].replace(/\+/g, "+"));return null;
+    }
 </script>
 </body>
 </html>

@@ -1,85 +1,14 @@
 /**
  * Created by JavieChan on 2016/12/27.
- * Updated by JavieChan on 2016/12/29.
+ * Updated by JavieChan on 2017/05/11.
  */
-
-// weixin-portal
-var loadIframe = null;
-var noResponse = null;
-var callUpTimestamp = 0;
-
-function putNoResponse(ev){
-    clearTimeout(noResponse);
-}
-
-function errorJump()
-{
-    var now = new Date().getTime();
-    if((now - callUpTimestamp) > 4*1000){
-        return;
-    }
-    alert('该浏览器不支持自动跳转微信请手动打开微信\n如果已跳转请忽略此提示');
-}
-
-myHandler = function(error) {
-    errorJump();
-};
-
-function createIframe(){
-    var iframe = document.createElement("iframe");
-    iframe.style.cssText = "display:none;width:0px;height:0px;";
-    document.body.appendChild(iframe);
-    loadIframe = iframe;
-}
-
-function jsonpCallback(result){
-    if(result && result.success){
-    // alert('WeChat will call up : ' + result.success + '  data:' + result.data);
-        var ua=navigator.userAgent;
-        if (ua.indexOf("iPhone") != -1 ||ua.indexOf("iPod")!=-1||ua.indexOf("iPad") != -1) {   //iPhone
-            document.location = result.data;
-        }else{
-            createIframe();
-            callUpTimestamp = new Date().getTime();
-            loadIframe.src=result.data;
-            noResponse = setTimeout(function(){
-                errorJump();
-            },3000);
-        }
-    }else if(result && !result.success){
-        alert(result.data);
-    }
-}
-function Wechat_GotoRedirect(appId, extend, timestamp, sign, shopId, authUrl, mac, ssid, bssid){
-    var url = "https://wifi.weixin.qq.com/operator/callWechatBrowser.xhtml?appId=" + appId
-            + "&extend=" + extend
-            + "&timestamp=" + timestamp
-            + "&sign=" + sign;
-
-    if(authUrl && shopId){
-        url = "https://wifi.weixin.qq.com/operator/callWechat.xhtml?appId=" + appId
-        + "&extend=" + extend
-        + "&timestamp=" + timestamp
-        + "&sign=" + sign
-        + "&shopId=" + shopId
-        + "&authUrl=" + encodeURIComponent(authUrl)
-        + "&mac=" + mac
-        + "&ssid=" + ssid
-        + "&bssid=" + bssid;
-
-    }
-
-    var script = document.createElement('script');
-    script.setAttribute('src', url);
-    document.getElementsByTagName('head')[0].appendChild(script);
-}
 
 ;(function($){
     var portalfn = function(ele, options){
         this.$ele = ele;
         this.defaults = {
-            user: '',
-            password: '',
+            user: options.user,
+            password: options.password,
             openid: '',
             ac_ip: '',
             vlanId: '',
@@ -128,8 +57,8 @@ function Wechat_GotoRedirect(appId, extend, timestamp, sign, shopId, authUrl, ma
         var self = this;
         $(document).on('click', '#autoAccount', function(){
             var obj = {
-                user: '55532',
-                password: '987012',
+                user: self.defaults.user,      // 55532
+                password: self.defaults.password,    // 987012
                 openid: self.opt.openid,
                 ac_ip: self.opt.ac_ip,
                 vlanId: self.opt.vlanId,
@@ -142,19 +71,23 @@ function Wechat_GotoRedirect(appId, extend, timestamp, sign, shopId, authUrl, ma
                 appid: self.opt.appid,
                 shopid: self.opt.shopid
             };
-            accountAjax(obj, function(data){
-                window.location.href= self.urlChange('${firsturl}', '${urlparam}');
-            }, function(xmlhttp, status){
-                if(status=='timeout'){
-                    alert('认证超时，请重新认证！');
-                }
-            }, function(error){
-                try{
-                    alert('验证失败：'+error.responseJSON.Msg);
-                }catch(e) {
-                    alert('验证失败，请重新认证！');
-                }
-            });
+
+            $(this).attr('disabled', true);
+            self.accountHandle(obj, true);
+
+            //accountAjax(obj, function(data){
+            //    window.location.href= self.urlChange('${firsturl}', '${urlparam}');
+            //}, function(xmlhttp, status){
+            //    if(status=='timeout'){
+            //        alert('认证超时，请重新认证！');
+            //    }
+            //}, function(error){
+            //    try{
+            //        alert('验证失败：'+error.responseJSON.Msg);
+            //    }catch(e) {
+            //        alert('验证失败，请重新认证！');
+            //    }
+            //});
         });
     };
     portalfn.prototype.checkIsyzm = function(){
@@ -337,45 +270,47 @@ function Wechat_GotoRedirect(appId, extend, timestamp, sign, shopId, authUrl, ma
                 }
             } else {
                 self.$login.text('正在验证').attr('disabled', true);
-                self.accountHandle(obj);
+                self.accountHandle(obj, false);
             }
         });
     };
-    portalfn.prototype.accountHandle = function(obj){
-        console.log(obj);
+    portalfn.prototype.accountHandle = function(obj, autoFlag){
         var self = this;
         accountAjax(obj, function(data){
             if( self.$autoUser.length>0 && self.$autoUser.find('input[type=checkbox]').is(':checked') ){
                 var name = self.$autoUser.data('name');
                 localStorage[name]=self.opt.user;
             }
-            self.$ele.find('.ns_msg').text('验证成功，可以上网').css('color', '#68d68f').show();
+            if(!autoFlag){
+                self.$ele.find('.ns_msg').text('验证成功，可以上网').css('color', '#68d68f').show();
+            }
             setTimeout(function(){
                 self.$ele.find('.ns_msg').fadeOut();
             }, 5000);
-            if( (data.pn=='15914') && (!self.opt.ismobile) ){
-                window.location.href = '/user/'+self.opt.user+'?token='+data.Token+'&code='+data.Code+'&pn='+data.pn+'&ssid='+data.ssid;
+            if(data.pn=='321411'){
+                window.location.href = '/user/'+self.opt.user+'?token='+data.Token+'&code='+data.Code+'&pn='+data.pn+'&ssid='+data.ssid+'&location='+data.location;
             }else{
                 window.location.href = ( (!self.$login.data('url')) ? self.urlChange(self.opt.firsturl, self.opt.urlparam) : self.$login.data('url') );
             }
         }, function(xmlhttp, status){
-            self.$login.text('登录').attr('disabled', false);
-            if(status=='timeout'){   // 超时,status还有success,error等值的情况
-                self.$ele.find('.ns_msg').text('请求超时，请重新登录').css('color', '#ef635c').show();
-                setTimeout(function(){
-                    self.$ele.find('.ns_msg').fadeOut();
-                }, 5000);
+            if(autoFlag){
+                $('#autoAccount').attr('disabled', false);
+                if(status=='timeout'){
+                    alert("请求超时，请重新登录！");
+                }
+            }else{
+                self.$login.text('登录').attr('disabled', false);
+                if(status=='timeout'){   // 超时,status还有success,error等值的情况
+                    self.$ele.find('.ns_msg').text('请求超时，请重新登录！').css('color', '#ef635c').show();
+                    setTimeout(function(){
+                        self.$ele.find('.ns_msg').fadeOut();
+                    }, 5000);
+                }
             }
         }, function(error){
             try{
                 var err = error.responseJSON;
-                if((err.Code==428) && (err.downMacs==1)){
-                    self.dmList(err.macs);
-                }else if( (err.pn=='15914') && (!self.opt.ismobile) && (!!err.Token) ){
-                    window.location.href = '/user/'+self.opt.user+'?token='+err.Token+'&code='+err.Code+'&pn='+err.pn+'&ssid='+err.ssid;
-                }else{
-                    alert('验证失败：'+err.Msg);
-                }
+                alert('验证失败：'+err.Msg);
             }catch(e) {
                 alert('验证失败，请重新登录！');
             }
