@@ -319,7 +319,41 @@
     $(function(){
         % if (policy >> 9 & 1) > 0:
         $('#weixinAuthor').click(function(){
-            Wechat_GotoRedirect('${appid}', '${extend}', '${timestamp}', '${sign}', '${shopid}', '${authUrl}', '${user_mac}', '${ssid}', '${ap_mac}');
+            var $self = $(this);
+            var params = {
+                user: '${user}',
+                password: '${password}',
+                openid: '${openid}',
+                ac_ip: '${ac_ip}',
+                vlanId: '${vlan}',
+                ssid: '${ssid}',
+                user_ip: '${user_ip}',
+                user_mac: '${user_mac}',
+                ap_mac: '${ap_mac}',
+                firsturl: '${firsturl}',
+                urlparam: '${urlparam}',
+                appid: '${appid}',
+                shopid: '${shopid}',
+                wx: 1
+            };
+            $self.attr('disabled', true);
+            accountAjax(params, function(data){
+                setTimeout(function(){
+                    Wechat_GotoRedirect('${appid}', '${extend}', '${timestamp}', '${sign}', '${shopid}', '${authUrl}', '${user_mac}', '${ssid}', '${ap_mac}');
+                }, 3000);
+            }, function(xmlhttp, status){
+                $self.attr('disabled', false);
+                if(status=='timeout'){
+                    alert("请求超时，请重新验证！");
+                }
+            }, function(error){
+                try{
+                    var err = error.responseJSON;
+                    alert('验证失败：'+err.Msg);
+                }catch(e) {
+                    alert('验证失败，请重新验证！');
+                }
+            });
         });
         % endif
 
