@@ -1,6 +1,6 @@
 /**
  * Created by JavieChan on 2016/12/27.
- * Updated by JavieChan on 2017/05/11.
+ * Updated by JavieChan on 2017/05/16.
  */
 
 ;(function($){
@@ -213,13 +213,15 @@
                     mask: 256,
                     pn: self.opt.pn
                 };
+                $('.loading').show();
                 getYzmAjax(param, function(data){
+                    $('.loading').hide();
                     verify = data.verify;
                     alert("验证码已下发到手机，请注意查收！");
                     self.$yzm.html('<span>60</span>秒重新获取').attr('disabled', true);
                     delayYZM();
                 },function(err){
-                    alert('请检查网络状态');
+                    showMsg('请检查网络状态');
                 });
             }
         });
@@ -276,43 +278,37 @@
     };
     portalfn.prototype.accountHandle = function(obj, autoFlag){
         var self = this;
+        $('.loading').show();
         accountAjax(obj, function(data){
+            $('.loading').hide();
+            if(autoFlag){
+                $('#autoAccount').attr('disabled', false);
+            }else{
+                self.$login.text('登录').attr('disabled', false);
+            }
+            infoMsg("验证成功，可以连接网络!");
             if( self.$autoUser.length>0 && self.$autoUser.find('input[type=checkbox]').is(':checked') ){
                 var name = self.$autoUser.data('name');
                 localStorage[name]=self.opt.user;
             }
-            if(!autoFlag){
-                self.$ele.find('.ns_msg').text('验证成功，可以上网').css('color', '#68d68f').show();
-            }
-            setTimeout(function(){
-                self.$ele.find('.ns_msg').fadeOut();
-            }, 5000);
             if(data.pn=='321411'){
                 window.location.href = '/user/'+self.opt.user+'?token='+data.Token+'&code='+data.Code+'&pn='+data.pn+'&ssid='+data.ssid+'&location='+data.location;
             }else{
+                alert(self.urlChange(self.opt.firsturl, self.opt.urlparam));
                 window.location.href = ( (!self.$login.data('url')) ? self.urlChange(self.opt.firsturl, self.opt.urlparam) : self.$login.data('url') );
             }
-        }, function(xmlhttp, status){
+        }, function(error){
+            $('.loading').hide();
             if(autoFlag){
                 $('#autoAccount').attr('disabled', false);
-                if(status=='timeout'){
-                    alert("请求超时，请重新登录！");
-                }
             }else{
                 self.$login.text('登录').attr('disabled', false);
-                if(status=='timeout'){   // 超时,status还有success,error等值的情况
-                    self.$ele.find('.ns_msg').text('请求超时，请重新登录！').css('color', '#ef635c').show();
-                    setTimeout(function(){
-                        self.$ele.find('.ns_msg').fadeOut();
-                    }, 5000);
-                }
             }
-        }, function(error){
             try{
                 var err = error.responseJSON;
-                alert('验证失败：'+err.Msg);
+                showMsg('验证失败：'+err.Msg);
             }catch(e) {
-                alert('验证失败，请重新登录！');
+                showMsg('验证失败，请重新登录！');
             }
         });
     };
@@ -341,10 +337,10 @@
                 };
                 accountDeleteAjax(param, function(data){
                     $('.ns_dmc').fadeOut('normal', function(){
-                        alert("请在5秒后重新认证!");
+                        showMsg("请在5秒后重新认证!");
                     });
                 }, function(error){
-                    alert("下线操作失败！");
+                    showMsg("下线操作失败！");
                 });
             }else{
                 alert('请选择下线设备！');
@@ -361,7 +357,7 @@
         $('#changepwd').on('click', function(e){
             e.stopPropagation();
             if(self.opt.user==''){
-                alert('请输入账号！');return false;
+                showMsg('请输入账号！');return false;
             }
             $('.ns_cgpwd').fadeIn();
         });
@@ -387,13 +383,13 @@
                     hidecgpwd();
                 }, function(error){
                     try{
-                        alert('修改密码失败：'+error.responseJSON.Msg);
+                        showMsg('修改密码失败：'+error.responseJSON.Msg);
                     }catch(e) {
-                        alert('修改密码失败，请重新提交！');
+                        showMsg('修改密码失败，请重新提交！');
                     }
                 });
             }else{
-                alert("两次新密码不一致!");
+                showMsg("两次新密码不一致!");
             }
         });
     };
@@ -422,6 +418,15 @@
 })(jQuery);
 
 // ajax
+function getWifi(callback, errFunc){
+    $.getScript('http://captive.apple.com/hotspot-detect.html&'+Math.random(), function(response, status){
+        if(status=='success'){
+            callback()
+        }else{
+            if(typeof(errFunc)=="function") errFunc();
+        }
+    });
+}
 function getYzmAjax(param, callback, errFunc){
     $.ajax({
         method: 'post',
@@ -446,7 +451,7 @@ function registerAjax(param, callback, errFunc){
         if(typeof(errFunc)=="function") errFunc(error);
     });
 }
-function accountAjax(param, callback, completeFunc, errFunc){
+function accountAjax(param, callback, errFunc){
     $.ajax({
         method: "POST",
         url: "/account",
@@ -457,9 +462,9 @@ function accountAjax(param, callback, completeFunc, errFunc){
         success: function (data) {
             callback(data);
         },
-        complete: function(xmlhttp, status){
-            completeFunc(xmlhttp, status);
-        },
+        //complete: function(xmlhttp, status){
+        //    completeFunc(xmlhttp, status);
+        //},
         error: function (error) {
             if(typeof(errFunc)=="function") errFunc(error);
         }
@@ -501,7 +506,6 @@ function AddEvent(obj, ev, fn){    //obj为要绑定事件的元素，ev为要�
     }
 }
 
-
 var verify, canyzm = true;
 function delayYZM(){
     var delay = $('#yzm span').text();
@@ -515,6 +519,42 @@ function delayYZM(){
         $('#yzm').html('获取验证码').attr('disabled', false);
         canyzm = true;
     }
+}
+
+var int;
+function showMsg(msg, tos){
+    clearTimeout(int);
+    var msgbox = document.getElementById('msgBox');
+    if(!!msgbox){
+        msgbox.remove();
+    }
+    var msgdiv = document.createElement('div');
+    msgdiv.id = 'msgBox';
+    msgdiv.className = 'msgBox';
+    msgdiv.innerText = msg;
+    document.body.appendChild(msgdiv);
+    if(!tos){tos = 4000;}
+    int = setTimeout(function () {
+        msgbox = document.getElementById('msgBox');
+        msgbox.remove();
+    }, tos);
+}
+function infoMsg(msg){
+    var msgbox = document.getElementById('infoMsg');
+    if(!!msgbox){
+        msgbox.remove();
+    }
+    var msgdiv = document.createElement('div');
+    msgdiv.id = 'infoMsg';
+    msgdiv.className = 'infoMsg';
+    msgdiv.innerText = msg;
+    document.body.appendChild(msgdiv);
+}
+
+function getParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return decodeURIComponent(r[2].replace(/\+/g, "+"));return null;
 }
 
 ;$(function(){

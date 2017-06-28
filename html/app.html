@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="telephone=no" name="format-detection">
+    <title>南沙通APP下载</title>
+    <style>
+        *{margin:0;padding:0}
+        body,html{width:100%;height:100%}
+        html{font-size:62.5%}
+        body{font-family:"microsoft yahei",proxima-nova,"Helvetica Neue",Helvetica,Arial,sans-serif;color:#333;font-size:1.4rem;background:#fff}
+        a,button,input,select{-webkit-tap-highlight-color:transparent;font-family:"microsoft yahei",proxima-nova,"Helvetica Neue",Helvetica,Arial,sans-serif;outline:0}
+        a{text-decoration:none}
+        button,input[type=button],input[type=password],input[type=text]{border:none;-webkit-appearance:none}
+        input::-webkit-input-placeholder{color:#d1edef}
+        li,ul{list-style:none}
+        input::-webkit-input-placeholder{color:#9b9e9f}
+        input[type=checkbox]{border:thin solid #d9d9d9;width:15px;height:15px;vertical-align:middle;margin-right:5px}
+        button{-webkit-user-select:none;user-select:none}
+        .app_wrapper div a.app_andriod:before,.app_wrapper div a.app_ios:before,.app_zmq:after,.app_zmq:before{content:" ";display:inline-block;vertical-align:middle;margin-top:-2px}
+        .app_body{position:relative}
+        .app_body .bg{background:url(/images/app/appbg_1x.jpg) no-repeat;background-size:100%;width:100%;padding-top:157%;position:absolute;top:0;left:0;z-index:-1}
+        .app_body .phone{background:url(/images/app/apphone_1x.png) no-repeat;background-size:240px;width:240px;height:256px;position:absolute;bottom:0;left:50%;margin-left:-120px}
+        .app_wrapper{padding-top:30px;text-align:center;color:#fff}
+        .app_wrapper .logo{background:url(/images/app/applogobig_1x.png) no-repeat;background-size:63px;width:63px;height:63px;display:block;margin:0 auto}
+        .app_wrapper h1{font-size:2rem;font-weight:400;margin:18px 0 8px}
+        .app_wrapper p{line-height:1.5;font-size:1.3rem}
+        .app_wrapper div{box-sizing:border-box;margin-top:18px;overflow:hidden}
+        .app_wrapper div a{color:#fff;display:inline-block;width:41%;height:42px;line-height:42px;-webkit-border-radius:21px;-moz-border-radius:21px;-o-border-radius:21px;border-radius:21px;font-size:1.6rem}
+        .app_wrapper div a.app_ios{background:#f58a8a;border-bottom:2px solid #ef635c;margin-left:6%;float:left}
+        .app_wrapper div a.app_ios:hover{background:#ff9c9c;border-bottom:2px solid #f27b7b}
+        .app_wrapper div a.app_andriod{background:#4ed754;border-bottom:2px solid #0ba916;margin-right:6%;float:right}
+        .app_wrapper div a.app_andriod:hover{background:#54e85b;border-bottom:2px solid #24b521}
+        .app_wrapper div a.app_ios:before{background:url(/images/app/app_sprites.png) 0 -12px no-repeat;background-size:25px;width:15px;height:17px;margin-right:5px}
+        .app_wrapper div a.app_andriod:before{background:url(/images/app/app_sprites.png) 0 -30px no-repeat;background-size:25px;width:15px;height:18px;margin-right:5px}
+        .wxbug{background:rgba(0,0,0,.6);position:fixed;top:0;left:0;right:0;bottom:0;display:none}
+        .wxbug p{color:#fff;font-size:1.8rem;margin:0 20px;padding-top:20%}
+        .wxbug p span{color:#EBDB4A}
+
+        % if not ismobile:
+        .app_body{width:600px;margin:0 auto;}
+        .app_body .bg{background:url(/images/app/appbg_3x.jpg) no-repeat;background-size:100%;padding-top:160%}
+        .app_body .phone{background:url(/images/app/apphone_3x.png) no-repeat;background-size:314px;width:314px;height:341px;margin-left:-157px}
+        % else:
+        @media (min-device-width:375px){.app_body .bg{background:url(/images/app/appbg_2x.jpg) no-repeat;background-size:100%;padding-top:160%}
+        .app_body .phone{background:url(/images/app/apphone_2x.png) no-repeat;background-size:281px;width:281px;height:300px;margin-left:-141px}
+        .app_wrapper .logo{background:url(/images/app/applogobig_2x.png) no-repeat;background-size:83px;width:83px;height:83px}
+        }
+        @media (min-device-width:414px) and (max-device-width:667px) and (-webkit-device-pixel-ratio:3){.app_body .bg{background:url(/images/app/appbg_3x.jpg) no-repeat;background-size:100%;padding-top:160%}
+        .app_body .phone{background:url(/images/app/apphone_3x.png) no-repeat;background-size:314px;width:314px;height:341px;margin-left:-157px}
+        .app_wrapper .logo{background:url(/images/app/applogobig_3x.png) no-repeat;background-size:83px}
+        }
+        % endif
+    </style>
+</head>
+
+<body>
+    <div class="app_body">
+        <div class="bg">
+            <div class="phone"></div>
+        </div>
+        <!--<img src="/images/nsimgs/appbg.jpg" class="bg" />-->
+        <div class="app_wrapper">
+            <i class="logo"></i>
+            <h1>南沙通APP下载</h1>
+            <p>安装即可，免注册上网，全区无感漫游，办事一键通</p>
+            <div>
+                <span id="appDL"><a href="http://itunes.apple.com/us/app/id1053795744" class="app_ios">iOS下载</a></span>
+                <a href="http://app.qq.com/#id=detail&appid=1105172658" class="app_andriod">Andriod下载</a>
+            </div>
+        </div>
+    </div>
+    <div class="wxbug" id="wxbug">
+        <p>戳右上角，选择“<span>在Safari中打开</span>”即可完成下载，等你呦！</p>
+    </div>
+    <script type="text/javascript">
+        var browser = {
+            versions: function() {
+                var u = navigator.userAgent, app = navigator.appVersion;
+                return {
+                    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+                    android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
+                    iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1,
+                    iPad: u.indexOf('iPad') > -1,
+                    weixin: u.indexOf('MicroMessenger') > -1
+                };
+            }()
+        };
+        if (browser.versions.weixin) {
+            if(browser.versions.ios || browser.versions.iPhone || browser.versions.iPad){
+                document.getElementById('appDL').innerHTML='<a href="javascript:;" class="app_ios" id="appios">iOS下载</a>';
+            }
+        }
+        var appios = document.getElementById("appios");
+        appios.ontouchstart = function(e){
+            document.getElementById('wxbug').style.display='block';
+        };
+    </script>
+</body>
+</html>

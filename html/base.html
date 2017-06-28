@@ -28,6 +28,72 @@
         .ns_cgpwd .cgpwd li>div{-webkit-box-flex:1;box-flex:1;border:thin solid #cecece;border-radius:7px;overflow:hidden}
         .ns_cgpwd .cgpwd li input{height:40px;width:100%;text-indent:15px;border:none}
 
+        .loading{background: #fff;line-height: 150px;position: fixed;top: 50%;left: 50%;margin-top: -56px;margin-left: -56px;box-shadow:0 0 3px rgba(0,0,0,0.1);border-radius: 4px;z-index:9999;display: none}
+        .loading img{display:block;padding:40px}
+        .infoMsg {
+          z-index: 9999;
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 100%;
+          text-align: center;
+          color: #65bc22;
+          background: #d0ebbc;
+          box-sizing: border-box;
+          padding: 7px 20px;
+          font-size: 14px;
+          line-height: 1.5;
+          animation-fill-mode: forwards;
+          animation: 1s infoUpDown;
+        }
+        @-webkit-keyframes infoUpDown {
+          from {
+            -webkit-transform: translateY(-50px);
+            opacity: 0;
+          }
+          to {
+            -webkit-transform: translateY(0px);
+            opacity: 1;
+          }
+        }
+        .msgBox {
+          opacity: 0;
+          z-index: 9999;
+          position: fixed;
+          left: 50%;
+          top: 40%;
+          width: 280px;
+          margin-left: -140px;
+          text-align: center;
+          color: #f14e4f;
+          background: rgba(255, 255, 255, 0.8);
+          box-sizing: border-box;
+          padding: 15px 20px;
+          font-size: 14px;
+          line-height: 1.5;
+          border-radius: 4px;
+          box-shadow: 0 1px 3px rgba(202, 218, 228, 0.6);
+          animation: 4s msgUpDown;
+        }
+        @-webkit-keyframes msgUpDown {
+          0% {
+            -webkit-transform: translateY(50px);
+            opacity: 0;
+          }
+          25%{
+            -webkit-transform: translateY(0px);
+            opacity: 1;
+          }
+          75%{
+            -webkit-transform: translateY(0px);
+            opacity: 1;
+          }
+          100% {
+            -webkit-transform: translateY(-50px);
+            opacity: 0;
+          }
+        }
+
         % if not ismobile:
         .ns_zz>div{position:relative;top:0;left:0;width:405px;height:346px;margin:10% auto;padding:30px 40px}
         .ns_zz h3{font-size:18px}
@@ -47,11 +113,12 @@
     </style>
     <script src="/js/lib/jquery.min.js"></script>
     <script src="/js/lib/md5.js"></script>
-    <script src="/js/ns.js?v=1.0.6"></script>
+    <script src="/js/ns.js?v=1.0.8"></script>
     </%block>
 </head>
 
 <body>
+    <div class="loading"><img src="/images/wrapload.gif" /></div>
     <div class="FormAccount">
         <div class="header">
             <img src="/images/${self.attr.bannerBg}" class="bannerBg" />
@@ -245,6 +312,15 @@
     % endif
     $(function(){
         % if (policy >> 9 & 1) > 0:
+        if(getParam('detect')==1){
+            infoMsg("正在跳转微信...");
+            $('#weixinAuthor').attr('disabled', true);
+            setTimeout(function(){
+                $('#weixinAuthor').attr('disabled', false);
+                Wechat_GotoRedirect('${appid}', '${extend}', '${timestamp}', '${sign}', '${shopid}', '${authUrl}', '${user_mac}', '${ssid}', '${ap_mac}');
+            }, 3000);
+        }
+
         $('#weixinAuthor').click(function(){
             var $self = $(this);
             var params = {
@@ -264,21 +340,52 @@
                 wx: 1
             };
             $self.attr('disabled', true);
+            $('.loading').show();
+
+            var repeatWifi = function(start){
+                getWifi(function(){
+                    $('.loading').hide();
+                    $self.attr('disabled', false);
+                    infoMsg("正在跳转微信...");
+                    Wechat_GotoRedirect('${appid}', '${extend}', '${timestamp}', '${sign}', '${shopid}', '${authUrl}', '${user_mac}', '${ssid}', '${ap_mac}');
+                }, function(){
+                    start --;
+                    if(start<0){
+                        $('.loading').hide();
+                        $self.attr('disabled', false);
+                        showMsg('验证失败，请重新验证');
+                        return false;
+                    }
+                    setTimeout(function(){
+                        repeatWifi(start);
+                    }, 5000);
+                })
+            };
+
             accountAjax(params, function(data){
+//                repeatWifi(1);
+                $('.loading').hide();
+//                window.location.href = window.location.href + '&detect=1';
+
+                loadIframe.src= "http://captive.apple.com/hotspot-detect.html?timestap="+ new Date().getTime();
+
+                var ua=navigator.userAgent;
+                if ( ua.indexOf("iPhone") != -1 ||ua.indexOf("iPod")!=-1||ua.indexOf("iPad") != -1 ) {
+                    alert("loadframe");
+                    loadIframe.src= "http://captive.apple.com/hotspot-detect.html?timestap="+ new Date().getTime();
+                }
+
                 setTimeout(function(){
                     Wechat_GotoRedirect('${appid}', '${extend}', '${timestamp}', '${sign}', '${shopid}', '${authUrl}', '${user_mac}', '${ssid}', '${ap_mac}');
-                }, 3000);
-            }, function(xmlhttp, status){
-                $self.attr('disabled', false);
-                if(status=='timeout'){
-                    alert("请求超时，请重新验证！");
-                }
+                }, 2000);
             }, function(error){
+                $('.loading').hide();
+                $self.attr('disabled', false);
                 try{
                     var err = error.responseJSON;
-                    alert('验证失败：'+err.Msg);
+                    showMsg('验证失败：'+err.Msg);
                 }catch(e) {
-                    alert('验证失败，请重新验证！');
+                    showMsg('验证失败，请重新验证！');
                 }
             });
         });
