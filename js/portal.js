@@ -2,6 +2,35 @@
  * Created by JavieChan on 2016/6/23.
  * Updated by JavieChan on 2016/12/9.
  */
+var int; 
+function showMsg(msg, tos){
+    clearTimeout(int);
+    var msgbox = document.getElementById('msgBox');
+    if(!!msgbox){
+        msgbox.remove();
+    }
+    var msgdiv = document.createElement('div');
+    msgdiv.id = 'msgBox';
+    msgdiv.className = 'msgBox';
+    msgdiv.innerText = msg;
+    document.body.appendChild(msgdiv);
+    if(!tos){tos = 4000;}
+    int = setTimeout(function () {
+        msgbox = document.getElementById('msgBox');
+        msgbox.remove();
+    }, tos);
+}
+function infoMsg(msg){
+    var msgbox = document.getElementById('infoMsg');
+    if(!!msgbox){
+        msgbox.remove();
+    }
+    var msgdiv = document.createElement('div');
+    msgdiv.id = 'infoMsg';
+    msgdiv.className = 'infoMsg';
+    msgdiv.innerText = msg;
+    document.body.appendChild(msgdiv);
+} 
 
 ;(function(){
     var isMobile=false, canyzm=true, verify;
@@ -20,7 +49,8 @@
             appid: '',
             shopid: '',
             pn: '',
-            policy: 1280
+            policy: 1280,
+            changePwd: false,
         },
         auth: function(param){
             for(var i in param)
@@ -36,17 +66,23 @@
             var div = self.opt.target;
 
             if( ((self.opt.policy>>10 & 1) & (self.opt.policy>>8 & 1)) > 0 ){
-                div.innerHTML = '<div id="portal_zone">'+
+                var html = '<div id="portal_zone">'+
                     '<div>'+
                         '<input type="text" id="portal_user" class="portal_user" name="portal_user" placeholder="账号/手机号：" />'+
                         '<button type="button" id="portal_yzm">获取验证码</button>'+
                     '</div>'+
                     '<div>'+
-                        '<input type="text" id="portal_pwd" name="portal_pwd" placeholder="密码/验证码：" />'+
-                        '<button type="button" id="portal_changePwd">修改密码</button>'+
-                    '</div>'+
+                        '<input type="text" id="portal_pwd" name="portal_pwd" placeholder="密码/验证码：" />';
+
+                if(self.opt.changePwd){
+                    html += '<button type="button" id="portal_changePwd">修改密码</button>';
+                } 
+
+                html +=  '</div>'+
                     '<button type="button" id="portal_login">登录</button>'+
                 '</div>';
+
+                div.innerHTML = html;
 
                 self.userCls = document.getElementsByClassName('portal_user')[0];
                 self.yzm = document.getElementById('portal_yzm');
@@ -68,16 +104,22 @@
                 self.unitYzm();
                 isMobile = true;
             }else if( (self.opt.policy >> 8 & 1) > 0 ){
-                div.innerHTML = '<div id="portal_zone">'+
+                var html = '<div id="portal_zone">'+
                     '<div>'+
                         '<input type="text" id="portal_user" name="portal_user" placeholder="账号：" />'+
                     '</div>'+
                     '<div>'+
-                        '<input type="password" id="portal_pwd" name="portal_pwd" placeholder="密码：" />'+
-                        '<button type="button" id="portal_changePwd">修改密码</button>'+
-                    '</div>'+
+                        '<input type="password" id="portal_pwd" name="portal_pwd" placeholder="密码：" />';
+
+                if(self.opt.changePwd){
+                    html += '<button type="button" id="portal_changePwd">修改密码</button>';
+                } 
+
+                html +=  '</div>'+
                     '<button type="button" id="portal_login">登录</button>'+
                 '</div>';
+
+                div.innerHTML = html;
             }
 
             self.user = document.getElementById('portal_user');
@@ -163,14 +205,20 @@
             self.login.innerHTML = '正在验证';
             self.login.disabled = true;
             self.unitAjax('/account', self.unitSerialze(obj), function(data){
-                self.login.innerHTML = '验证成功';
                 self.login.disabled = false;
-                window.location.href = firsturl+(urlparam ? '?'+urlparam : '');
+                infoMsg("验证成功，可以连接网络!");
+                self.login.innerHTML = '登录';
+                // window.location.href = firsturl+(urlparam ? '?'+urlparam : '');
             }, function(error){
-                self.login.innerHTML = '重新验证';
                 self.login.disabled = false;
-                eval("var objErr =" + error);
-                alert('验证失败：'+ objErr.Msg);
+                self.login.innerHTML = '登录';
+                try{
+                    eval("var objErr =" + error);
+                    // alert('验证失败：'+ objErr.Msg);
+                    showMsg("验证失败:"+ objErr.Msg);
+                }catch(e){
+                    showMsg("验证失败，请重新登录！");
+                }
             });
         },
         unitAjax: function(url, param, fnSucc, fnFaild){
